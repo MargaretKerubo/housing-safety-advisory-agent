@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Housing Agent Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 700px;
+            margin: 2rem;
+        }
+
+        label {
+            display: block;
+            margin-top: 1rem;
+        }
+
+        textarea {
+            width: 100%;
+            height: 80px
+        }
+
+        input[type=text],
+        input[type=number] {
+            width: 100%;
+        }
+
+        pre {
+            background: #f6f6f6;
+            padding: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Housing Safety Advisory — Test Form</h1>
+
+    <p>Either paste a free-text query, or fill structured fields below.</p>
+
+    <form id="apiForm">
+        <label>Free-text input
+            <textarea name="user_input" placeholder="Describe your move, e.g. I'm moving to Kisumu..."></textarea>
+        </label>
+
+        <hr />
+
+        <label>Current location
+            <input type="text" name="current_location" />
+        </label>
+
+        <label>Target location
+            <input type="text" name="target_location" />
+        </label>
+
+        <label>Workplace location
+            <input type="text" name="workplace_location" />
+        </label>
+
+        <label>Monthly budget (KES)
+            <input type="number" name="monthly_budget" />
+        </label>
+
+        <label>Preferences
+            <input type="text" name="preferences" />
+        </label>
+
+        <button type="submit" style="margin-top:1rem">Submit</button>
+    </form>
+
+    <h2>Response</h2>
+    <pre id="response">—</pre>
+
+    <script>
+        const form = document.getElementById('apiForm');
+        const resp = document.getElementById('response');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fd = new FormData(form);
+            // Prefer JSON submission
+            const obj = {};
+            for (const [k, v] of fd.entries()) {
+                if (v) obj[k] = v;
+            }
+
+            resp.textContent = 'Waiting for response...';
+
+            try {
+                const r = await fetch('/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(obj)
+                });
+                const j = await r.json();
+                resp.textContent = JSON.stringify(j, null, 2);
+            } catch (err) {
+                resp.textContent = String(err);
+            }
+        });
+    </script>
+</body>
+
+</html>
