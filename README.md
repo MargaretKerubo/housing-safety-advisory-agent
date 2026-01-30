@@ -9,84 +9,43 @@ An AI-powered decision-support agent that helps users evaluate housing options b
 - **Budget-Conscious**: Helps balance safety considerations with budget constraints
 - **Explainable Decisions**: Provides clear reasoning for each recommendation
 - **Location-Based**: Currently optimized for Kisumu, Kenya housing market
+- **Modular Architecture**: Clean separation of concerns with well-defined components
 
 ## Prerequisites
 
-- **Conda** (Miniconda or Anaconda) - [Install Conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/)
 - **Python 3.10 or higher**
 - **Google Gemini API Key** - [Get API Key](https://aistudio.google.com/)
 
-## Conda Environment Setup
+## Quick Start
 
-### 1. Create a New Conda Environment
-
-```bash
-# Create a new conda environment with Python 3.10
-conda create -n housing-safety python=3.10 -y
-```
-
-### 2. Activate the Environment
+### 1. Set up your environment
 
 ```bash
-# On Linux/Mac
-conda activate housing-safety
+# Create a virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# On Windows
-conda activate housing-safety
-```
-
-### 3. Install Dependencies
-
-```bash
-# Navigate to the project directory
-cd housing-safety-advisory-agent
-
-# Install required Python packages
+# Install dependencies
 pip install -r requirements.txt
 ```
 
-### 4. Set Up Environment Variables
+### 2. Set Up Environment Variables
 
 Create a `.env` file in the project root directory:
 
 ```bash
-# Create .env file
-touch .env
+# Copy the example file
+cp .env.example .env
 
-# Add your Gemini API key to .env file
-echo "GEMINI_API_KEY=your_api_key_here" > .env
-```
-
-Or manually create `.env` with:
-```
-GEMINI_API_KEY=your_google_gemini_api_key_here
+# Edit .env with your API key
+nano .env  # Or use your preferred editor
 ```
 
 ## How to Run the Project
 
-### 1. Activate the Conda Environment
-
-```bash
-conda activate housing-safety
-```
-
-### 2. Set Up Your API Key
-
-Make sure your `.env` file is set up with your Gemini API key, or export it directly:
-
-```bash
-# Option A: Using .env file (recommended)
-# Make sure .env file exists with your GEMINI_API_KEY
-
-# Option B: Export directly
-export GEMINI_API_KEY="your_api_key_here"
-```
-
-### 3. Run the Application
-
 ```bash
 # Run the main application
-python gemini_main.py
+python main.py
 ```
 
 ## Dependencies
@@ -100,11 +59,47 @@ python gemini_main.py
 ```
 housing-safety-advisory-agent/
 ├── README.md                    # Project documentation
-├── requirements.txt             # Python dependencies
-├── gemini_main.py              # Main application script
-├── docs/response_schema.json  # Example response format
-└── .env                        # Environment variables (create this)
+├── main.py                     # Main application entry point
+├── requirements.txt            # Python dependencies
+├── setup.py                    # Package setup
+├── .env.example               # Example environment variables
+├── docs/                      # Documentation and schemas
+│   └── response_schema.json   # Example response format
+├── src/                       # Source code
+│   ├── __init__.py
+│   ├── core/                  # Core business logic
+│   │   ├── __init__.py
+│   │   ├── config.py          # Configuration and API client setup
+│   │   ├── triage.py          # Input analysis and validation
+│   │   ├── gather_details.py  # Information gathering logic
+│   │   ├── research.py        # Neighborhood research logic
+│   │   ├── presentation.py    # Response formatting
+│   │   └── agent_orchestrator.py # Main agent workflow
+│   ├── models/                # Data models
+│   │   ├── __init__.py
+│   │   └── housing_models.py  # Pydantic models
+│   ├── tools/                 # External tools (future use)
+│   │   └── __init__.py
+│   ├── agents/                # Specialized agents (future use)
+│   │   └── __init__.py
+│   └── utils/                 # Utility functions
+│       ├── __init__.py
+│       └── chat_utils.py      # Interactive chat utilities
+├── tests/                     # Test suite
+│   ├── __init__.py
+│   └── test_models.py         # Model tests
+└── .env                       # Environment variables (not tracked)
 ```
+
+## Architecture Overview
+
+The application follows a modular architecture with clear separation of concerns:
+
+- **Models**: Defines data structures using Pydantic for validation
+- **Core**: Contains the main business logic and AI integration
+- **Utils**: Provides helper functions and utilities
+- **Agents**: Will contain specialized AI agents (future expansion)
+- **Tools**: Will contain external integrations (future expansion)
 
 ## License
 
