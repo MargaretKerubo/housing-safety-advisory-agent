@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Advisory</title>
+    <style>
+        /* --- CSS STYLES --- */
+        :root {
+            --primary: #2e7d32; /* Green for SDG 11 / Safety */
+            --secondary: #1565c0; /* Trustworthy Blue */
+            --bg: #f4f7f6;
+            --white: #ffffff;
+            --text: #333;
+            --accent: #ff9800; /* Caution/Alert Orange */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: var(--white);
+            width: 100%;
+            max-width: 500px;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            margin: 20px;
+        }
+
+        .hidden { display: none; }
+
+        h2 { color: var(--primary); text-align: center; margin-bottom: 1.5rem; }
+        p.subtitle { text-align: center; font-size: 0.9rem; color: #666; margin-top: -1rem; margin-bottom: 2rem; }
+
+        .form-group { margin-bottom: 1.2rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover { background-color: #1b5e20; }
+        .secondary-btn { background-color: var(--secondary); }
+        .link-text { text-align: center; margin-top: 1rem; font-size: 0.9rem; }
+        .link-text span { color: var(--secondary); cursor: pointer; text-decoration: underline; }
+
+        /* Recommendation UI */
+        .card {
+            border-left: 5px solid var(--primary);
+            background: #e8f5e9;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+        }
+        .risk-high { border-left-color: #d32f2f; background: #ffebee; }
+        .risk-med { border-left-color: var(--accent); background: #fff3e0; }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <section id="login-section">
+            <h2>Welcome to SafePath</h2>
+            <p class="subtitle">SDG 11: Community Safety Advisory</p>
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" placeholder="••••••••">
+            </div>
+            <button onclick="showSection('details-section')">Login</button>
+            <p class="link-text">Don't have an account? <span onclick="showSection('signup-section')">Sign Up</span></p>
+        </section>
+
+        <section id="signup-section" class="hidden">
+            <h2>Create Account</h2>
+            <p class="subtitle">Join the secure community network</p>
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" placeholder="John Doe">
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" placeholder="+254...">
+            </div>
+            <div class="form-group">
+                <label>Emergency Contact</label>
+                <input type="tel" placeholder="Next of Kin number">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" placeholder="Create password">
+            </div>
+            <button class="secondary-btn" onclick="showSection('details-section')">Register</button>
+            <p class="link-text">Already have an account? <span onclick="showSection('login-section')">Login</span></p>
+        </section>
+
+        <section id="details-section" class="hidden">
+            <h2>Safety Profile</h2>
+            <p class="subtitle">Tell us about your current commute</p>
+            <div class="form-group">
+                <label>Current Location (Neighborhood)</label>
+                <input type="text" id="loc-input" placeholder="e.g. Nyali, CBD, Langata">
+            </div>
+            <div class="form-group">
+                <label>Mode of Transport</label>
+                <select id="transport-select" onchange="toggleOtherInput()">
+                    <option value="car">Private Car</option>
+                    <option value="psv">Public Service Vehicle (PSV)</option>
+                    <option value="motorbike">Motorbike / Boda Boda</option>
+                    <option value="foot">On Foot / Walking</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div id="other-transport-div" class="form-group hidden">
+                <label>Please specify</label>
+                <input type="text" id="other-input" placeholder="e.g. Bicycle, Scooter">
+            </div>
+            <div class="form-group">
+                <label>Time of Commute</label>
+                <input type="time" id="time-input">
+            </div>
+            <button onclick="generateRecommendations()">Get Safety Advisory</button>
+        </section>
+
+        <section id="results-section" class="hidden">
+            <h2>Advisory Report</h2>
+            <div id="recommendations-container">
+                </div>
+            <button onclick="showSection('details-section')">New Search</button>
+        </section>
+    </div>
+
+    <script>
+        /* --- JAVASCRIPT LOGIC --- */
+
+        // Function to switch between sections
+        function showSection(sectionId) {
+            document.querySelectorAll('section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+
+        // Toggle manual input for 'Other' transport
+        function toggleOtherInput() {
+            const select = document.getElementById('transport-select');
+            const otherDiv = document.getElementById('other-transport-div');
+            if (select.value === 'other') {
+                otherDiv.classList.remove('hidden');
+            } else {
+                otherDiv.classList.add('hidden');
+            }
+        }
+
+        // Simulated recommendation engine
+        function generateRecommendations() {
+            const location = document.getElementById('loc-input').value || "Your Area";
+            const transport = document.getElementById('transport-select').value;
+            const container = document.getElementById('recommendations-container');
+            
+            // Clear previous results
+            container.innerHTML = `<p style="text-align:center">Analyzing safety metrics for <strong>${location}</strong>...</p>`;
+
+            // Simulate a delay for "processing"
+            setTimeout(() => {
+                let html = `<h3>Current Status: ${location}</h3>`;
+                
+                // Simulated logic based on transport type
+                if(transport === 'foot' || transport === 'motorbike') {
+                    html += `
+                    <div class="card risk-high">
+                        <span class="badge" style="background:#d32f2f">HIGH ALERT</span>
+                        <p><strong>Route Safety:</strong> Lighting in this sector is currently reported as 40% functional. Avoid dark alleys.</p>
+                        <p><strong>Advisory:</strong> Stick to the main well-lit roads. A security patrol was last seen 15 mins ago near the junction.</p>
+                    </div>`;
+                } else {
+                    html += `
+                    <div class="card">
+                        <span class="badge" style="background:#2e7d32">SAFE ROUTE</span>
+                        <p><strong>Traffic & Safety:</strong> Regular flow detected. No major security incidents reported in the last 24 hours.</p>
+                        <p><strong>Advisory:</strong> Standard precautions apply. Keep windows rolled up in slow-moving traffic.</p>
+                    </div>`;
+                }
+
+                html += `
+                <div class="card risk-med">
+                    <span class="badge" style="background:#ff9800">COMMUNITY NOTE</span>
+                    <p>Verified users in <strong>${location}</strong> report a "Neighborhood Watch" meeting today at 6:00 PM. Increased community presence expected.</p>
+                </div>`;
+
+                container.innerHTML = html;
+                showSection('results-section');
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
