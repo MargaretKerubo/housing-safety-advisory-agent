@@ -48,6 +48,16 @@ nano .env  # Or use your preferred editor
 python main.py
 ```
 
+## Run simple HTTP server (frontend testing)
+
+Start the lightweight server that serves the test form and exposes `POST /submit`:
+
+```bash
+python3 simple_server.py
+```
+
+Then open `http://localhost:8000/` to use `docs/form.html`, or see `docs/FRONTEND_INTEGRATION.md` for `curl` examples.
+
 ## Dependencies
 
 - `google-genai>=0.1.0` - Google Gemini AI SDK
