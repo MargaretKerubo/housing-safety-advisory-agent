@@ -1,0 +1,94 @@
+{
+  "status": "success",
+  "requirements": {
+    "has_all_details": true,
+    "current_location": "Nairobi",
+    "target_location": "Kisumu",
+    "workplace_location": "Kisumu Nyalenda area",
+    "monthly_budget": 15000.0,
+    "preferences": "Moderate to high secure neighbourhoods, preferably next to a police post"
+  },
+  "recommendations": {
+    "neighborhoods": [
+      {
+        "name": "Polyview Estate",
+        "distance_to_cbd": "3.5 km",
+        "average_rent_1br": "KES 10,000 - KES 14,000",
+        "average_rent_2br": "KES 15,000 - KES 20,000",
+        "security_rating": "4/5 stars",
+        "security_details": "Polyview is a relatively structured residential area near Kisumu National Polytechnic. Security is moderate to high. Most apartment blocks are walled with razor wire and guarded gates. The area benefits from being close to Kondele Police Station, ensuring quick response times. Neighborhood watch groups are active, especially among student residences, contributing to general vigilance. Street lighting is generally reliable on main access roads.",
+        "amenities": [
+          "Kondele Market (major fresh produce market)",
+          "Kisumu National Polytechnic Health Centre",
+          "Various primary and secondary schools",
+          "Small supermarkets and chemists"
+        ],
+        "transportation": "Excellent accessibility. Matatus (route 11/12) are frequent, connecting directly to Kondele and the CBD. Boda bodas are readily available 24/7. Commute time to Nyalenda is typically 10-15 minutes via Kondele.",
+        "description": "A popular residential area known for its structured environment and proximity to educational institutions. It offers a good balance between affordability and security, making it ideal for professionals.",
+        "pros": [
+          "Relatively high security compared to neighboring areas.",
+          "Good infrastructure and road network.",
+          "Close proximity to major transport junctions (Kondele)."
+        ],
+        "cons": [
+          "Can be noisy due to student population.",
+          "2BR units often exceed the KES 15,000 budget.",
+          "Traffic congestion during peak hours near Kondele junction."
+        ]
+      },
+      {
+        "name": "Upper Nyalenda (Kondele Border Section)",
+        "distance_to_cbd": "2.5 km",
+        "average_rent_1br": "KES 7,000 - KES 10,000",
+        "average_rent_2br": "KES 10,000 - KES 15,000",
+        "security_rating": "3.5/5 stars",
+        "security_details": "This specific section is highly recommended due to the presence of the Nyalenda Police Post, providing immediate security coverage. While Nyalenda generally has mixed security, the upper parts feature newer, well-secured compounds (stone walls, steel gates, some with internal guards). Security is enhanced by the proximity to the main Kisumu-Nairobi highway, which sees constant police patrol. Residents often rely on compound-specific security measures rather than large community watch programs.",
+        "amenities": [
+          "Nyalenda Market (local fresh produce)",
+          "Jaramogi Oginga Odinga Teaching and Referral Hospital (JOOTRH) is nearby",
+          "Numerous local primary and secondary schools",
+          "Small shops and kiosks"
+        ],
+        "transportation": "Immediate access to Nyalenda workplace. Matatus are extremely frequent along the main road. Boda bodas are the primary means of internal transport. Commute time to the center of Nyalenda is 5-10 minutes.",
+        "description": "The most convenient option for proximity to the workplace, offering affordable housing within secure compounds in the upper, more developed section of Nyalenda, directly benefiting from the local police post.",
+        "pros": [
+          "Immediate proximity to the workplace.",
+          "Nyalenda Police Post is located within the neighborhood.",
+          "2BR units are comfortably within the KES 15,000 budget."
+        ],
+        "cons": [
+          "Lower Nyalenda areas suffer from poor infrastructure (roads, drainage).",
+          "Security outside gated compounds can be unpredictable late at night.",
+          "High population density."
+        ]
+      },
+      {
+        "name": "Migosi Estate (Phase I)",
+        "distance_to_cbd": "4.0 km",
+        "average_rent_1br": "KES 12,000 - KES 15,000",
+        "average_rent_2br": "KES 18,000 - KES 25,000",
+        "security_rating": "4/5 stars",
+        "security_details": "Migosi is a planned, middle-class residential area known for its tranquility and good security. Most houses and apartment blocks are well-fenced, and many compounds employ private security guards. The area has active residents' associations that coordinate security matters and liaise with the nearby Kondele Police Station. Street lighting is generally superior to neighboring areas, reducing opportunities for petty crime.",
+        "amenities": [
+          "Migosi Primary School",
+          "Migosi Shopping Center (supermarkets, banks)",
+          "Private clinics and pharmacies",
+          "Easy access to Kibuye Market"
+        ],
+        "transportation": "Matatus serve the main Migosi routes frequently. Boda bodas are essential for accessing inner streets. Commute to Nyalenda involves passing through Kondele/Kibuye and takes approximately 15-20 minutes depending on traffic.",
+        "description": "A highly sought-after estate offering a quiet, secure environment. While 2BR units often exceed budget, high-quality 1BR apartments are readily available within the KES 15,000 limit.",
+        "pros": [
+          "Excellent security and well-maintained environment.",
+          "Good planning and infrastructure (paved roads).",
+          "Quiet, family-friendly atmosphere."
+        ],
+        "cons": [
+          "Higher rent prices; 2BR units are generally unaffordable on this budget.",
+          "Slightly longer commute time to Nyalenda.",
+          "Dependence on Boda bodas for inner-estate movement."
+        ]
+      }
+    ]
+  },
+  "message": "Hello! Welcome to Kisumu. Moving to a new city is exciting, and finding the right place to live is the first big step. Since you will be working in the Kisumu Nyalenda area, we\u2019ve focused on neighborhoods that offer a great balance of security, affordability, and a manageable commute.\n\nHere are three excellent neighborhood recommendations for your consideration:\n\n---\n\n## Neighborhood Recommendations\n\n### 1. Polyview Estate\n\nPolyview is a structured residential area popular among young professionals and students due to its proximity to the Kisumu National Polytechnic. It offers a lively atmosphere and solid infrastructure.\n\n| Detail | Summary |\n| :--- | :--- |\n| **Location** | Adjacent to Kondele, near Kisumu National Polytechnic. |\n| **Rent Range (Monthly)** | 1 Bedroom: KES 10,000 \u2013 KES 14,000 |\n| | 2 Bedroom: KES 15,000 \u2013 KES 20,000 (Often exceeds budget) |\n| **Commute to Nyalenda** | 10\u201315 minutes (via Kondele) |\n| **Security Highlights (4/5 Stars)** | **High Security Focus:** Most apartment blocks are modern, featuring high walls, razor wire, and guarded gates. The area benefits significantly from being close to the **Kondele Police Station**, ensuring rapid response times. |\n| **Key Amenities** | Kondele Market (major fresh produce), Kisumu National Polytechnic Health Centre, small supermarkets, and chemists. |\n| **Pros** | Relatively high security, good infrastructure, excellent access to major transport routes. |\n| **Cons** | Can be noisy due to the student population, 2-bedroom units are often expensive. |\n\n***\n\n### 2. Upper Nyalenda (Kondele Border Section)\n\nThis is the most convenient option for your commute, offering immediate access to your workplace while benefiting from enhanced security in the upper, more developed section of the estate.\n\n| Detail | Summary |\n| :--- | :--- |\n| **Location** | The upper, developed section bordering Kondele. |\n| **Rent Range (Monthly)** | 1 Bedroom: KES 7,000 \u2013 KES 10,000 |\n| | 2 Bedroom: KES 10,000 \u2013 KES 15,000 (Excellent affordability) |\n| **Commute to Nyalenda** | 5\u201310 minutes (Immediate access) |\n| **Security Highlights (3.5/5 Stars)** | **Highly Convenient Security:** This area is recommended specifically because it is near the **Nyalenda Police Post**, providing immediate coverage. Newer compounds are well-secured with stone walls and steel gates. |\n| **Key Amenities** | Nyalenda Market (local produce), close to Jaramogi Oginga Odinga Teaching and Referral Hospital (JOOTRH), local shops. |\n| **Pros** | Immediate proximity to your workplace, 2-bedroom units are comfortably within budget, direct benefit from the local Police Post. |\n| **Cons** | Lower Nyalenda areas have poor infrastructure (drainage, roads). Security outside of gated compounds can be unpredictable late at night. |\n\n***\n\n### 3. Migosi Estate (Phase I)\n\nIf a quieter, more family-friendly environment is a priority, Migosi is an excellent choice, known for its planned layout and superior security measures.\n\n| Detail | Summary |\n| :--- | :--- |\n| **Location** | Planned middle-class residential area, slightly further northeast. |\n| **Rent Range (Monthly)** | 1 Bedroom: KES 12,000 \u2013 KES 15,000 |\n| | 2 Bedroom: KES 18,000 \u2013 KES 25,000 (Likely over budget) |\n| **Commute to Nyalenda** | 15\u201320 minutes (Passing through Kondele/Kibuye) |\n| **Security Highlights (4/5 Stars)** | **Excellent Planned Security:** Migosi is quiet and well-maintained. Many compounds employ private security guards. Active residents' associations coordinate security, and street lighting is generally superior, minimizing opportunities for petty crime. |\n| **Key Amenities** | Migosi Shopping Center (supermarkets, banks), private clinics, easy access to Kibuye Market. |\n| **Pros** | Excellent security, quiet and tranquil atmosphere, good infrastructure with paved roads. |\n| **Cons** | Higher rent; 2-bedroom units are generally unaffordable on a KES 15,000 budget. Slightly longer commute time. |\n\n---\n\n## Practical Next Steps\n\nNow that you have a few options, here is how to move forward with confidence:\n\n### 1. Property Viewing and Agent Contact\n\n*   **Engage Local Agents:** Look for reputable estate agents specializing in the area. They often have listings that aren't online. A good agent can help you navigate the specific security variations within a large estate like Nyalenda.\n*   **Visit During Different Times:** If possible, view the property and the surrounding area during the day and in the early evening. This gives you a clear picture of noise levels, traffic, and street lighting.\n*   **Focus on Compound Security:** When viewing, prioritize apartments with strong perimeter walls (stone/concrete), reliable steel gates, and proper lighting in common areas.\n\n### 2. Verification and Due Diligence\n\n*   **Verify Ownership:** Before paying any deposit, confirm the agent\u2019s legitimacy and, ideally, meet the property owner or the official management company. Never pay cash without a signed receipt.\n*   **Check Utilities:** Ask about water availability (Kisumu sometimes faces rationing) and power reliability. Confirm if the rent includes service charges (garbage collection, security).\n*   **Talk to Neighbors:** The best source of information about local security and management is the current residents. Ask them about their experience with the landlord and local issues.\n\nWe are here to help you settle in smoothly. Kisumu is a vibrant city, and with these secure and convenient options, you'll feel right at home in no time! Happy house hunting!"
+}
