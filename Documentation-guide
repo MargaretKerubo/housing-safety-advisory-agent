@@ -1,25 +1,25 @@
 # Internal Build Guide – Housing Safety Advisory Agent
 
-> **Purpose of this document**
-> This document is for the **development team only**. It defines *what we are building*, *how the agent should think*, and *how code should be structured*.
+> Purpose of this document
+> It defines what we are building, how the agent should think, and how code should be structured.
 ---
 
 ## 1. Agent Goal
 
-Build an explainable AI **decision-support agent** that helps users evaluate accommodation options by reasoning over safety-related trade-offs (commute, time, budget, context) without labeling neighborhoods or making authoritative claims.
+Build an explainable AI decision-support agent that helps users evaluate accommodation options by reasoning over safety-related trade-offs (commute, time, budget, context) without labeling neighborhoods or making authoritative claims.
 
 ---
 
 ## 2. What This Agent Is / Is Not
 
-### The agent **IS**:
+### The agent IS:
 
 * Advisory, not authoritative
 * Rule-driven with AI-assisted explanation
-* Focused on **trade-offs**, not predictions
+* Focused on trade-offs, not predictions
 * Context-aware (user profile + constraints)
 
-### The agent **IS NOT**:
+### The agent IS NOT:
 
 * A crime prediction system
 * A neighborhood ranking engine
@@ -32,11 +32,11 @@ Build an explainable AI **decision-support agent** that helps users evaluate acc
 
 These principles guide all implementation decisions.
 
-1. **Explainability first** – every recommendation must be traceable to rules and inputs
-2. **Ethical neutrality** – no stigmatizing language or labels
-3. **AI as a component** – rules decide, AI explains
-4. **Minimal but structured data** – no heavy datasets
-5. **Deterministic core logic** – same inputs → same risk evaluation
+1. Explainability first – every recommendation must be traceable to rules and inputs
+2. Ethical neutrality – no stigmatizing language or labels
+3. AI as a component – rules decide, AI explains
+4. Minimal but structured data – no heavy datasets
+5. Deterministic core logic – same inputs → same risk evaluation
 
 ---
 
@@ -121,7 +121,7 @@ Example rule:
 
 * If return_time = night AND commute_distance > threshold → increase risk
 
-This component **must not use AI**.
+This component must not use AI.
 
 ---
 
@@ -148,12 +148,12 @@ Responsible for:
 * Explaining *why* one option is preferred
 * Communicating uncertainty and limitations
 
-AI **does not**:
+AI does not:
 
 * Decide risk levels
 * Override rule outputs
 
-AI **does**:
+AI does:
 
 * Explain decisions
 * Summarize reasoning
@@ -211,4 +211,4 @@ The system must:
 
 ---
 
-> **Reminder:** If a feature does not support decision-making or explainability, it does not belong in this agent.
+> Reminder: If a feature does not support decision-making or explainability, it does not belong in this agent.
