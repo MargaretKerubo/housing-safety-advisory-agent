@@ -12,22 +12,24 @@ load_dotenv()
 # Initialize Gemini client
 client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
 
+#  DO NOT TOUCH
+#  IMPORTANT FOR DEBUGGING PURPOSES
+# 
+# def list_available_models():
+#     """List all available models for debugging."""
+#     try:
+#         models = client.models.list()
+#         print("Available models:")
+#         for model in models:
+#             print(f"  - {model.name}")
+#     except Exception as e:
+#         print(f"Error listing models: {e}")
 
-def list_available_models():
-    """List all available models for debugging."""
-    try:
-        models = client.models.list()
-        print("Available models:")
-        for model in models:
-            print(f"  - {model.name}")
-    except Exception as e:
-        print(f"Error listing models: {e}")
 
-
-# List available models for reference
-print("=" * 80)
-list_available_models()
-print("=" * 80)
+# # List available models for reference
+# print("=" * 80)
+# list_available_models()
+# print("=" * 80)
 
 
 # Define Pydantic models for structured outputs
