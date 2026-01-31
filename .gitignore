@@ -165,3 +165,134 @@ Thumbs.db
 
 # Coverage
 .coverage*
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dist/
+.nyc_output
+coverage/
+.nyc_output/
+coverage/
+
+# React-specific
+.next/
+out/
+.nuxt/
+public/
+*.zip
+*.tar.gz
+*.gz
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.staging.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp
+.pnp.js
+coverage/
+*.lcov
+.report.html
+.cache/
+.parcel-cache
+.vercel
+.netlify
+.firebase
+.firebaserc
+
+# React build outputs
+frontend/build/
+frontend/node_modules/
+
+# Python virtual environment in project root
+venv/
+env/
+.venv/
+
+# Environment specific files
+.env.local
+.env.dev
+.env.production
+.env.test
+.env.staging
+.env.backup
+
+# Editor files
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+nbproject/
+
+# Temporary folders
+tmp/
+temp/
+
+# Compiled binary addons (http://nodejs.org/api/addons.html)
+build/Release
+
+# Dependency directories
+jspm_packages/
+
+# TypeScript v1 declaration files
+typings/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+
+# Next.js build output
+.next/
+out/
+
+# Nuxt.js build output
+.nuxt/
+dist/
+
+# Vue.js build output
+dist/
+
+# Serverless directories
+.serverless/
+
+# FuseBox cache
+.fusebox/
+
+# DynamoDB Local files
+.dynamodb/
+
+# TernJS port file configuration
+.tern-port
+
+# Stores VSCode versions used for testing VSCode extensions
+.vscode-test
+
+# yarn v2
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# End of .gitignore

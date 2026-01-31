@@ -1,6 +1,7 @@
-# Housing Safety Advisory Agent
 
-An AI-powered decision-support agent that helps users evaluate housing options by reasoning over safety-related trade-offs such as commute patterns, time of travel, budget constraints, and situational risk factors. Designed as an ethical, explainable advisory system aligned with SDG 11.
+# Housing Safety Advisory Agent with React Frontend
+
+An AI-powered decision-support agent that helps users evaluate housing options by reasoning over safety-related trade-offs such as commute patterns, time of travel, budget constraints, and situational risk factors. Features a React frontend with authentication and a Python Flask backend.
 
 ## Features
 
@@ -10,10 +11,13 @@ An AI-powered decision-support agent that helps users evaluate housing options b
 - **Explainable Decisions**: Provides clear reasoning for each recommendation
 - **Location-Based**: Currently optimized for Kisumu, Kenya housing market
 - **Modular Architecture**: Clean separation of concerns with well-defined components
+- **React Frontend**: Modern UI with authentication and responsive design
+- **Python Backend**: Flask API serving the housing recommendation engine
 
 ## Prerequisites
 
 - **Python 3.10 or higher**
+- **Node.js and npm** (for the React frontend)
 - **Google Gemini API Key** - [Get API Key](https://aistudio.google.com/)
 
 ## Quick Start
@@ -25,7 +29,7 @@ An AI-powered decision-support agent that helps users evaluate housing options b
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# Install dependencies
+# Install Python dependencies
 pip install -r requirements.txt
 ```
 
@@ -41,41 +45,61 @@ cp .env.example .env
 nano .env  # Or use your preferred editor
 ```
 
-## How to Run the Project
+### 3. Install and Build the Frontend
 
 ```bash
-# Run the main application
-python main.py
+# Navigate to the frontend directory
+cd frontend
+
+# Install dependencies
+npm install
+
+# Build the React app
+npm run build
 ```
 
-## Run simple HTTP server (frontend testing)
-
-Start the lightweight server that serves the test form and exposes `POST /submit`:
+### 4. Run the Application
 
 ```bash
-python3 simple_server.py
+# From the project root directory
+python api_server.py
 ```
 
-Then open `http://localhost:8000/` to use `docs/form.html`, or see `docs/FRONTEND_INTEGRATION.md` for `curl` examples.
+The application will be available at `http://localhost:5000`
 
-## Dependencies
+## Development
 
-- `google-genai>=0.1.0` - Google Gemini AI SDK
-- `pydantic>=2.0.0` - Data validation
-- `python-dotenv>=1.0.0` - Environment variable management
+### Frontend Development
+
+```bash
+# In one terminal, start the React development server
+cd frontend
+npm start
+
+# In another terminal, start the Python backend
+python api_server.py
+```
+
+Note: During development, the React app will run on `http://localhost:3000` and proxy API requests to the Flask backend.
+
+### Backend Development
+
+The backend API endpoints are:
+
+- `POST /api/housing-recommendations` - Get housing recommendations
+- `GET /api/health` - Health check
 
 ## Project Structure
 
 ```
 housing-safety-advisory-agent/
 ├── README.md                    # Project documentation
-├── main.py                     # Main application entry point
+├── api_server.py               # Flask API server
 ├── requirements.txt            # Python dependencies
-├── setup.py                    # Package setup
 ├── .env.example               # Example environment variables
 ├── docs/                      # Documentation and schemas
 │   └── response_schema.json   # Example response format
-├── src/                       # Source code
+├── src/                       # Housing agent source code
 │   ├── __init__.py
 │   ├── core/                  # Core business logic
 │   │   ├── __init__.py
@@ -95,9 +119,22 @@ housing-safety-advisory-agent/
 │   └── utils/                 # Utility functions
 │       ├── __init__.py
 │       └── chat_utils.py      # Interactive chat utilities
+├── frontend/                  # React frontend
+│   ├── public/                # Public assets
+│   ├── src/                   # React source code
+│   │   ├── App.js             # Main application component
+│   │   ├── components/        # React components
+│   │   │   ├── AuthFlow.js    # Authentication component
+│   │   │   └── MainApp.js     # Main application component
+│   │   ├── utils/             # Utility functions
+│   │   │   └── apiService.js  # API service
+│   │   └── styles/            # CSS styles
+│   ├── package.json           # Frontend dependencies
+│   └── build/                 # Built frontend assets
 ├── tests/                     # Test suite
 │   ├── __init__.py
-│   └── test_models.py         # Model tests
+│   ├── test_models.py         # Model tests
+│   └── test_structure.py      # Structural verification tests
 └── .env                       # Environment variables (not tracked)
 ```
 
@@ -105,11 +142,11 @@ housing-safety-advisory-agent/
 
 The application follows a modular architecture with clear separation of concerns:
 
+- **Frontend**: React application with Bootstrap components for responsive UI
+- **Backend**: Flask API serving the housing recommendation engine
 - **Models**: Defines data structures using Pydantic for validation
 - **Core**: Contains the main business logic and AI integration
 - **Utils**: Provides helper functions and utilities
-- **Agents**: Will contain specialized AI agents (future expansion)
-- **Tools**: Will contain external integrations (future expansion)
 
 ## License
 
