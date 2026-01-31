@@ -36,11 +36,16 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar bg="primary" variant="dark" expand="lg" className="shadow-sm">
+      <Navbar expand="lg" className="shadow-sm modern-navbar" fixed="top">
         <Container>
-          <Navbar.Brand href="#home" className="d-flex align-items-center">
-            <i className="bi bi-house-door-fill me-2"></i>
-            <span className="fw-bold fs-4">🏠 Smart Housing Advisor</span>
+          <Navbar.Brand href="#home" className="d-flex align-items-center brand-logo">
+            <div className="brand-icon me-3">
+              <i className="bi bi-house-heart-fill"></i>
+            </div>
+            <div>
+              <span className="fw-bold fs-3 brand-text">Smart Housing</span>
+              <div className="brand-subtitle">Advisory Platform</div>
+            </div>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
@@ -48,11 +53,12 @@ function App() {
               {isLoggedIn && (
                 <Nav.Item>
                   <Button
-                    variant="outline-light"
+                    variant="outline-primary"
                     onClick={handleLogout}
-                    className="d-flex align-items-center"
+                    className="d-flex align-items-center modern-btn"
                   >
-                    <i className="bi bi-box-arrow-right me-1"></i> Logout
+                    <i className="bi bi-box-arrow-right me-2"></i> 
+                    <span>Sign Out</span>
                   </Button>
                 </Nav.Item>
               )}
@@ -61,9 +67,9 @@ function App() {
         </Container>
       </Navbar>
 
-      <Container className="py-4">
+      <Container className="py-4 main-content">
         {!isLoggedIn ? (
-          <div className="d-flex justify-content-center">
+          <div className="d-flex justify-content-center align-items-center min-vh-100">
             <AuthFlow onLogin={handleLogin} />
           </div>
         ) : (
@@ -71,10 +77,22 @@ function App() {
         )}
       </Container>
 
-      <footer className="bg-light py-3 mt-5">
+      <footer className="modern-footer py-4 mt-5">
         <Container>
-          <div className="text-center text-muted">
-            <small>© {new Date().getFullYear()} Smart Housing Advisor | Promoting Safe Housing Solutions</small>
+          <div className="text-center">
+            <div className="d-flex justify-content-center align-items-center mb-3">
+              <div className="footer-icon me-2">
+                <i className="bi bi-house-heart"></i>
+              </div>
+              <span className="fw-semibold">Smart Housing Advisory</span>
+            </div>
+            <p className="text-muted mb-2">
+              Empowering safe and informed housing decisions across Kenya
+            </p>
+            <small className="text-muted">
+              © {new Date().getFullYear()} Smart Housing Advisory Platform | 
+              <span className="text-primary fw-semibold"> Promoting Sustainable Communities</span>
+            </small>
           </div>
         </Container>
       </footer>
