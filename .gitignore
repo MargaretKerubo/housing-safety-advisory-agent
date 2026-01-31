@@ -181,7 +181,7 @@ coverage/
 .next/
 out/
 .nuxt/
-public/
+/public
 *.zip
 *.tar.gz
 *.gz
