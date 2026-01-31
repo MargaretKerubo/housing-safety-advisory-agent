@@ -35,6 +35,21 @@ class TransportMode(Enum):
     BUS = "bus"
 
 
+class RiskLevel(Enum):
+    """Risk level classification (situational, not area-based)."""
+    LOW = "low"
+    MODERATE = "moderate"
+    ELEVATED = "elevated"
+
+    def description(self) -> str:
+        descriptions = {
+            RiskLevel.LOW: "Standard precautions apply",
+            RiskLevel.MODERATE: "Additional awareness recommended",
+            RiskLevel.ELEVATED: "Consider adjusting commute or timing"
+        }
+        return descriptions.get(self, "")
+
+
 class HousingRequirements(BaseModel):
     has_all_details: bool
     current_location: Optional[str] = ""

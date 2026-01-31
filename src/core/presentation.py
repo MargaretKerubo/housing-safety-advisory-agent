@@ -5,6 +5,31 @@ from src.models.housing_models import NeighborhoodRecommendation, HousingRequire
 from src.core.safety_guardrails import inject_safety_context, postprocess_response
 
 
+def safe_model_dump(obj):
+    """Safely dump a Pydantic model to JSON string, handling enums."""
+    try:
+        import json
+        from pydantic import BaseModel
+        
+        def serialize_value(val):
+            if isinstance(val, BaseModel):
+                return serialize_value(val.model_dump())
+            elif isinstance(val, Enum):
+                return val.value
+            elif isinstance(val, dict):
+                return {k: serialize_value(v) for k, v in val.items()}
+            elif isinstance(val, list):
+                return [serialize_value(item) for item in val]
+            else:
+                return val
+        
+        if isinstance(obj, BaseModel):
+            return json.dumps(serialize_value(obj.model_dump()), indent=2, default=str)
+        return str(obj)
+    except Exception as e:
+        return f"Error serializing: {e}"
+
+
 def present_recommendations(
     recommendations: NeighborhoodRecommendation,
     requirements: HousingRequirements,
@@ -65,7 +90,24 @@ Typical return time: {requirements.typical_return_time.value if requirements.typ
 Transport mode: {requirements.transport_mode.value if requirements.transport_mode else 'matatu'}
 
 Recommendations to present:
-{recommendations.model_dump_json()}"""
+{recommendations.model_dump_json()}
+"""
+
+    # DEBUG: Print the recommendations to help debug JSON serialization issues
+    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    print("DEBUG - recommendations type:", type(recommendations))
+    print("DEBUG - has neighborhoods:", hasattr(recommendations, 'neighborhoods'))
+    if hasattr(recommendations, 'neighborhoods'):
+        print("DEBUG - number of neighborhoods:", len(recommendations.neighborhoods))
+        for i, n in enumerate(recommendations.neighborhoods):
+            print(f"DEBUG - neighborhood {i}: {n.name if hasattr(n, 'name') else 'unknown'}")
+    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
     # Inject safety context
     safe_prompt = inject_safety_context(prompt, user_context)

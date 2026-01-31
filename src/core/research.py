@@ -6,6 +6,52 @@ from src.models.housing_models import HousingRequirements, NeighborhoodRecommend
 from src.core.safety_guardrails import inject_safety_context, postprocess_response
 
 
+def extract_json_from_response(response_text: str) -> str:
+    """
+    Extracts a valid JSON object from an AI response that may contain
+    additional text, markdown formatting, or multiple JSON objects.
+    
+    Args:
+        response_text: The raw AI response text
+        
+    Returns:
+        Extracted JSON string suitable for parsing
+    """
+    # Find the first occurrence of '{' and the last occurrence of '}'
+    start_index = response_text.find('{')
+    end_index = response_text.rfind('}')
+    
+    if start_index == -1 or end_index == -1:
+        # No JSON found, try to clean and return the original
+        return response_text
+    
+    # Extract the JSON portion
+    json_str = response_text[start_index:end_index + 1]
+    
+    # Attempt to validate it's proper JSON by checking balance
+    try:
+        # Check if braces are balanced
+        open_braces = json_str.count('{')
+        close_braces = json_str.count('}')
+        
+        if open_braces != close_braces:
+            # Try to find the correct closing brace
+            # This is a fallback for malformed JSON
+            depth = 0
+            for i, char in enumerate(json_str):
+                if char == '{':
+                    depth += 1
+                elif char == '}':
+                    depth -= 1
+                    if depth == 0:
+                        json_str = json_str[:i + 1]
+                        break
+    except Exception:
+        pass
+    
+    return json_str
+
+
 def research_neighborhoods(
     requirements: HousingRequirements,
     conversation_history: List[Message],
@@ -89,6 +135,9 @@ Return ONLY valid JSON, no markdown formatting."""
     # Post-process to ensure no authoritative claims slipped through
     cleaned_response = postprocess_response(response.text)
     
-    parsed = json.loads(cleaned_response)
+    # Extract JSON portion from response (handles markdown, extra text, etc.)
+    json_response = extract_json_from_response(cleaned_response)
+    
+    parsed = json.loads(json_response)
     return NeighborhoodRecommendation(**parsed)
 

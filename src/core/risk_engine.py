@@ -29,46 +29,8 @@ Key Ethical Principles:
 from dataclasses import dataclass
 from typing import Dict, List, Optional
 from enum import Enum
-from src.models.housing_models import RiskTolerance, ReturnTime, LivingArrangement, TransportMode
+from src.models.housing_models import RiskTolerance, ReturnTime, LivingArrangement, TransportMode, RiskLevel
 import time
-
-
-class TransportMode(Enum):
-    """Modes of transportation available."""
-    WALKING = "walking"
-    BODABODA = "bodaboda"
-    MATATU = "matatu"
-    PRIVATE = "private"
-    BUS = "bus"
-
-
-class ReturnTime(Enum):
-    """Typical return time to home."""
-    DAYTIME = "daytime"  # Before 6 PM
-    EVENING = "evening"  # 6 PM - 9 PM
-    NIGHT = "night"  # After 9 PM
-
-
-class LivingArrangement(Enum):
-    """Living arrangement type."""
-    ALONE = "alone"
-    SHARED = "shared"
-    FAMILY = "family"
-
-
-class RiskLevel(Enum):
-    """Risk level classification (situational, not area-based)."""
-    LOW = "low"
-    MODERATE = "moderate"
-    ELEVATED = "elevated"
-    
-    def description(self) -> str:
-        descriptions = {
-            RiskLevel.LOW: "Standard precautions apply",
-            RiskLevel.MODERATE: "Additional awareness recommended",
-            RiskLevel.ELEVATED: "Consider adjusting commute or timing"
-        }
-        return descriptions.get(self, "")
 
 
 @dataclass
