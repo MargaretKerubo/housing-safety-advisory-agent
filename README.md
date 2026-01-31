@@ -1,231 +1,97 @@
-# Internal Build Guide – Housing Safety Advisory Agent
+# Housing Safety Advisory Agent
 
-> Purpose of this document
-> This document defines what we are building, how the agent should reason, and how the codebase should be structured.
 
----
+## 1. Problem Statement
 
-## 1. Agent Goal
+Accessing safe and suitable housing requires balancing multiple constraints such as budget, commute patterns, time of travel, and situational risk factors. Many people especially those relocating or working non-standard hour lack tools that help them reason transparently about safety-related trade-offs without relying on stigmatizing labels, crime rankings, or opaque recommendations.
 
-Build an explainable AI-powered **decision-support agent** that helps users evaluate accommodation options by reasoning over **safety-related trade-offs** such as commute patterns, time of travel, budget constraints, and situational risk factors.
-
-The agent supports **informed decision-making** without labeling neighborhoods or making authoritative or predictive claims. The system is aligned with **SDG 11: Sustainable Cities and Communities**.
+This project addresses the absence of ethical, explainable, and context-aware decision-support systems that help people make informed housing choices while respecting uncertainty and user autonomy. Outputs are **advisory guidance, not a definitive assessment**.
 
 ---
 
-## 2. What This Agent Is / Is Not
+## 2. SDG Alignment
 
-### The agent IS:
+*Promoting transparency, awareness, and individual agency.*
 
-* Advisory, not authoritative
-* Decision-support, not decision-making
-* Rule-driven with AI-assisted explanation
-* Focused on trade-offs, not predictions
-* Context-aware (user preferences + situational factors)
+This project primarily aligns with **UN Sustainable Development Goal 11: Sustainable Cities and Communities**, particularly:
 
-### The agent IS NOT:
+* **11.1**: Access to adequate, safe, and affordable housing
+* **11.3**: Inclusive and sustainable urbanization
+* **11.7**: Safe, inclusive, and accessible public spaces
 
-* A crime prediction system
-* A neighborhood or area ranking engine
-* A system that labels places as “safe” or “unsafe”
-* A chatbot that gives generic housing advice
-* A system that uses real crime, surveillance, or demographic data
+The agent contributes by supporting informed housing decisions without exclusion or stigma, avoiding harmful labeling of communities, and preserving individual agency.
 
 ---
 
-## 3. Core Design Principles
+## 3. Architecture and Design Choices
 
-These principles guide all implementation decisions.
+The system is built as a **decision-support architecture** with a deterministic, rule-based core and a strictly separated AI explanation layer.
 
-1. **Explainability first** – every output must be traceable to explicit rules and user inputs
-2. **Ethical neutrality** – avoid stigmatizing language, assumptions, or labels
-3. **AI as a component** – rules decide, AI explains
-4. **Minimal but structured data** – no heavy datasets or opaque models
-5. **Deterministic core logic** – same inputs must always lead to the same evaluation
+Design choices include:
 
----
+* Rule-first evaluation of situational risk factors
+* Deterministic logic for repeatable outcomes
+* Explicit trade-off analysis across safety, cost, and convenience
+* Ethical guardrails to prevent biased or unsafe usage
+* Lightweight, explainable data assumptions
 
-## 4. High-Level System Flow
+High-level flow:
 
-1. Collect user inputs
-2. Validate inputs and apply guardrails
-3. Build or update the user session profile
-4. Evaluate situational risk using deterministic rules
-5. Analyze trade-offs and compute comparable scores
-6. Generate explanations using AI
-7. Return structured recommendations
-
----
-
-## 5. Key Components to Implement
-
-### 5.1 Input Layer
-
-Responsible for:
-
-* Collecting structured user inputs
-* Normalizing values (e.g. budget bands, distance ranges)
-
-Expected user inputs:
-
-* City / town
-* Budget range (estimate)
-* Preferred location or area
-* Commute destination
-* Commute distance or time
-* Typical return time (day / night)
-* **How cautious do you prefer your housing options to be?** (low / medium / high)
-* Living arrangement (alone / shared)
+1. Collect and validate user inputs
+2. Normalize constraints and preferences
+3. Apply rule-based situational risk evaluation
+4. Analyze trade-offs and compute comparative scores
+5. Generate human-readable explanations
+6. Return ranked options (Low / Medium / Higher risk)
 
 ---
 
-### 5.2 Guardrails & Validation Layer
+## 4. AI Usage
 
-Responsible for:
+AI is used solely as an **explanation and communication layer**.
 
-* Rejecting incomplete or invalid inputs
-* Refusing unsafe, biased, or stigmatizing queries
-* Reframing problematic requests into ethical alternatives
+AI is responsible for:
 
-Examples:
+* Explaining how inputs and rules led to an outcome
+* Describing safety-related trade-offs in accessible language
+* Answering “why” and “why not” questions
+* Communicating uncertainty and system limits
 
-* Refuse: “Which areas are dangerous?”
-* Reframe to: “I can help you compare housing options based on situational risk trade-offs.”
+AI is **not** used to:
 
----
+* Predict crime or risk probabilities
+* Rank or label neighborhoods
+* Override rule-based evaluations
 
-### 5.3 User Profile & Session State
-
-Responsible for:
-
-* Persisting user preferences during a session
-* Supporting multi-step interactions
-
-Session state includes:
-
-* Budget constraints
-* Commute preferences
-* Caution level (safety preference)
+This separation preserves transparency, accountability, and ethical control.
 
 ---
 
-### 5.4 Rule-Based Risk Evaluation Engine
+## 5. Trade-offs and Limitations
 
-Responsible for:
+### Trade-offs
 
-* Applying predefined, transparent rules
-* Producing numeric or categorical risk indicators
+* Transparency and explainability are prioritized over predictive accuracy
+* Rule-based logic limits adaptability but ensures accountability
+* The system informs decisions without prescribing outcomes
 
-Rules may consider:
+### Limitations
 
-* Time of travel (day vs night)
-* Commute length
-* Transport availability
-* Living alone vs shared accommodation
+* No real-time or historical crime data is used
+* Results depend on the accuracy of user-provided information
+* Regional context may be generalized
+* Risk levels are comparative, not absolute measures of safety
 
-Example rule:
-```bash
-* If `return_time = night` AND `commute_distance > threshold` → increase situational risk
-
-> This component must **not** use AI.
-```
----
-
-### 5.5 Scoring & Trade-Off Analyzer
-
-Responsible for:
-
-* Aggregating rule outputs
-* Balancing safety, cost, and convenience
-* Identifying explicit trade-offs
-
-Outputs include:
-
-* Risk category (Low / Medium / Higher)
-* Key trade-offs influencing the evaluation
-
----
-
-### 5.6 AI Reasoning & Explanation Layer
-
-Responsible for:
-
-* Translating scores into clear, natural language
-* Explaining *why* certain options rank higher or lower
-* Communicating uncertainty and limitations
-
-AI does **not**:
-
-* Decide risk levels
-* Override rule-based outputs
-
-AI **does**:
-
-* Explain decisions
-* Summarize trade-offs
-* Answer “why” and “why not” questions
-
----
-
-### 5.7 Output Formatter
-
-Responsible for:
-
-* Producing final user-facing responses
-* Supporting both human-readable explanations and structured outputs
-
----
-
-## 6. Data Strategy
-
-* No real crime datasets
-* No real-time feeds
-* No surveillance or demographic data
-* Use small, static, explainable reference values
-
-All assumptions must be documented in code comments.
-
----
-
-## 7. Ethical Constraints (Hard Rules)
-
-The system must:
-
-* Never label locations as safe or unsafe
-* Never rank neighborhoods by crime
-* Avoid demographic or socioeconomic assumptions
-* Include advisory disclaimers in all outputs
-
----
-
-## 8. What Success Looks Like (Internal)
-
-* Clean separation of components
-* Deterministic and testable core logic
-* Clear explanations for every recommendation
-* A simple, easy-to-follow demo flow
-* Code that directly reflects this document
-
----
-
-## 9. What Comes Next
-
-1. Define input and output schemas
-2. Implement the rule-based risk engine
-3. Integrate the AI explanation layer
-4. Build a simple CLI or UI
-5. Write a public-facing README
+Users should treat all outputs as **advisory guidance, not definitive assessments**.
 
 ---
 
 ## Authors
 
-* Flovian Atieno
-* Mitchelle Kangethe
-* Anthony Oduor
-* Stephen Oginga
-* Margaret Kerubo
+* **Flovian Atieno**
+* **Mitchelle Kangethe**
+* **Anthony Oduor**
+* **Stephen Oginga**
+* **Margaret Kerubo**
 
 ---
-
-### Quote Reminder: If a feature does not support decision-making or explainability, it does not belong in this agent.
