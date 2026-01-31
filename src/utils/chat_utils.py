@@ -1,4 +1,3 @@
-
 import json
 from typing import List
 from src.models.housing_models import Message
@@ -30,6 +29,14 @@ def interactive_chat():
             # Add user input to history
             conversation_history.append({"role": "user", "content": user_input})
 
+            # Print any safety warnings first
+            if result.get('warning_message'):
+                print(f"\n⚠️  {result['warning_message']}")
+            
+            # Print advisory disclaimer if present
+            if result.get('advisory_disclaimer'):
+                print(f"\n📌 {result['advisory_disclaimer']}")
+
             # Print assistant's response
             print(f"\n🤖 Assistant: {result['message']}")
 
@@ -51,3 +58,4 @@ def interactive_chat():
         except Exception as e:
             print(f"\n❌ An error occurred: {e}")
             print("Please try again or type 'quit' to exit.")
+
