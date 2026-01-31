@@ -60,6 +60,12 @@ const AuthFlow = ({ onLogin }) => {
 
     // Reset form
     setSignupForm({ name: '', email: '', emergency: '', password: '' });
+    
+    // Auto-redirect to login tab after 2 seconds
+    setTimeout(() => {
+      setKey('login');
+      setSuccess('');
+    }, 2000);
   };
 
   return (
@@ -67,23 +73,28 @@ const AuthFlow = ({ onLogin }) => {
       <Card.Body className="p-4">
         <div className="text-center mb-4">
           <div className="feature-icon mx-auto mb-3">
-            <i className="bi bi-person-circle"></i>
+            <i className="bi bi-house-heart-fill"></i>
           </div>
-          <Card.Title className="h3 fw-bold text-dark">
-            {key === 'login' ? 'Welcome Back!' : 'Join Us Today!'}
+          <Card.Title className="h2 fw-bold text-dark mb-2">
+            {key === 'login' ? 'Welcome Back!' : 'Join Our Community!'}
           </Card.Title>
-          <p className="text-muted">
-            {key === 'login' ? 'Sign in to access your dashboard' : 'Create an account to get started'}
+          <p className="text-muted fs-6">
+            {key === 'login' ? 'Sign in to access your personalized housing advisor' : 'Create your account to find your perfect home'}
           </p>
         </div>
 
         <Tabs
           id="auth-tabs"
           activeKey={key}
-          onSelect={(k) => setKey(k)}
-          className="mb-4 nav-fill"
+          onSelect={(k) => {
+            setKey(k);
+            setError('');
+            setSuccess('');
+          }}
+          className="mb-4 nav-fill custom-tabs"
+          variant="pills"
         >
-          <Tab eventKey="login" title="Login" className="fade show active">
+          <Tab eventKey="login" title="Login">
             <Form onSubmit={handleLoginSubmit}>
               {error && <Alert variant="danger" className="rounded-3">{error}</Alert>}
 
@@ -111,32 +122,29 @@ const AuthFlow = ({ onLogin }) => {
                 />
               </Form.Group>
 
-              <Button variant="primary" type="submit" className="w-100 py-2 rounded-2 fw-semibold">
+              <Button variant="primary" type="submit" className="w-100 py-3 rounded-3 fw-bold fs-5 btn-gradient">
+                <i className="bi bi-box-arrow-in-right me-2"></i>
                 Sign In
               </Button>
             </Form>
           </Tab>
 
-          <Tab eventKey="signup" title="Sign Up" className="fade show active">
+          <Tab eventKey="signup" title="Sign Up">
             <Form onSubmit={handleSignupSubmit}>
               {error && <Alert variant="danger" className="rounded-3">{error}</Alert>}
               {success && <Alert variant="success" className="rounded-3">{success}</Alert>}
 
-              <Row>
-                <Col md={12}>
-                  <Form.Group className="mb-3" controlId="signupName">
-                    <Form.Label className="fw-semibold text-dark">Full Name</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Enter your full name"
-                      value={signupForm.name}
-                      onChange={(e) => setSignupForm({...signupForm, name: e.target.value})}
-                      className="rounded-2 py-2"
-                      required
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
+              <Form.Group className="mb-3" controlId="signupName">
+                <Form.Label className="fw-semibold text-dark">Full Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter your full name"
+                  value={signupForm.name}
+                  onChange={(e) => setSignupForm({...signupForm, name: e.target.value})}
+                  className="rounded-2 py-2"
+                  required
+                />
+              </Form.Group>
 
               <Form.Group className="mb-3" controlId="signupEmail">
                 <Form.Label className="fw-semibold text-dark">Email Address</Form.Label>
@@ -173,16 +181,17 @@ const AuthFlow = ({ onLogin }) => {
                 />
               </Form.Group>
 
-              <Button variant="primary" type="submit" className="w-100 py-2 rounded-2 fw-semibold">
+              <Button variant="primary" type="submit" className="w-100 py-3 rounded-3 fw-bold fs-5 btn-gradient">
+                <i className="bi bi-person-plus-fill me-2"></i>
                 Create Account
               </Button>
             </Form>
           </Tab>
         </Tabs>
 
-        <div className="text-center mt-4">
-          <p className="text-muted small">
-            By signing up, you agree to our <a href="#terms">Terms of Service</a> and <a href="#privacy">Privacy Policy</a>
+        <div className="text-center mt-4 pt-3 border-top">
+          <p className="text-muted small mb-0">
+            By continuing, you agree to our <a href="#terms" className="text-decoration-none fw-semibold">Terms of Service</a> and <a href="#privacy" className="text-decoration-none fw-semibold">Privacy Policy</a>
           </p>
         </div>
       </Card.Body>
