@@ -15,6 +15,7 @@ import {
 import apiService from '../utils/apiService';
 
 const MainApp = ({ currentUser, onLogout }) => {
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [formData, setFormData] = useState({
     location: '',
     destination: '',
@@ -101,107 +102,138 @@ const MainApp = ({ currentUser, onLogout }) => {
   };
 
   return (
-    <Container fluid className="py-4">
-      <Row>
-        {/* Sidebar - User Profile */}
-        <Col lg={3} className="d-none d-lg-block">
-          <Card className="profile-card h-100">
-            <div className="text-center mb-4">
-              <div className="feature-icon mx-auto mb-3">
-                <i className="bi bi-person-fill"></i>
+    <Container fluid className="py-4 dashboard-container">
+      <Row className="g-4">
+        {/* Modern Sidebar */}
+        <Col xl={sidebarCollapsed ? 1 : 3} lg={sidebarCollapsed ? 1 : 4} className="d-none d-lg-block">
+          <div className={`modern-sidebar ${sidebarCollapsed ? 'collapsed' : ''}`}>
+            {!sidebarCollapsed ? (
+              <div className="sidebar-content">
+                {/* User Info */}
+                <div className="user-info">
+                  <div className="user-avatar">
+                    <span>{currentUser?.name?.charAt(0) || 'U'}</span>
+                  </div>
+                  <div className="user-details">
+                    <h5 className="user-name">{currentUser?.name || 'Guest User'}</h5>
+                    <p className="user-email">{currentUser?.email || 'No email'}</p>
+                  </div>
+                </div>
+
+                {/* Quick Stats */}
+                <div className="quick-stats">
+                  <div className="stat-item">
+                    <i className="bi bi-shield-check"></i>
+                    <span>Verified Account</span>
+                  </div>
+                  <div className="stat-item">
+                    <i className="bi bi-telephone"></i>
+                    <span>{currentUser?.emergency ? 'Emergency Set' : 'No Emergency'}</span>
+                  </div>
+                </div>
+
+                {/* Action Button */}
+                <button className="sidebar-logout" onClick={onLogout}>
+                  <i className="bi bi-box-arrow-right"></i>
+                  <span>Sign Out</span>
+                </button>
               </div>
-              <h5 className="fw-bold text-dark">{currentUser?.name || 'Guest User'}</h5>
-              <p className="text-muted small mb-1">{currentUser?.email || 'No email provided'}</p>
-            </div>
-
-            <div className="border-top pt-3 mt-3">
-              <h6 className="fw-semibold text-dark mb-2"><i className="bi bi-shield-lock me-2"></i>Security</h6>
-              <p className="text-muted small mb-0">
-                Emergency: <span className="fw-medium">{currentUser?.emergency || 'N/A'}</span>
-              </p>
-            </div>
-
-            <div className="mt-4">
-              <Button
-                variant="outline-primary"
-                onClick={onLogout}
-                className="w-100 py-2 rounded-2 fw-semibold"
-              >
-                <i className="bi bi-box-arrow-right me-2"></i>Sign Out
-              </Button>
-            </div>
-          </Card>
+            ) : (
+              <div className="sidebar-collapsed">
+                <div className="collapsed-avatar">
+                  <span>{currentUser?.name?.charAt(0) || 'U'}</span>
+                </div>
+                <button className="collapsed-logout" onClick={onLogout} title="Sign Out">
+                  <i className="bi bi-box-arrow-right"></i>
+                </button>
+              </div>
+            )}
+            
+            {/* Toggle Button */}
+            <button
+              className="sidebar-toggle"
+              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+              title={sidebarCollapsed ? 'Expand' : 'Collapse'}
+            >
+              <i className={`bi bi-chevron-${sidebarCollapsed ? 'right' : 'left'}`}></i>
+            </button>
+          </div>
         </Col>
 
         {/* Main Content */}
-        <Col lg={9}>
-          <Card className="advisor-card">
-            <div className="d-flex align-items-center mb-4">
-              <div className="feature-icon me-3">
-                <i className="bi bi-house-heart"></i>
-              </div>
-              <div>
-                <h3 className="fw-bold text-dark mb-0">🏠 Smart Housing Advisor</h3>
-                <p className="text-muted mb-0">Find safe and affordable housing options tailored to your needs</p>
+        <Col xl={sidebarCollapsed ? 11 : 9} lg={sidebarCollapsed ? 11 : 8}>
+          <div className="main-dashboard">
+            {/* Header Section */}
+            <div className="dashboard-header mb-4">
+              <div className="d-flex align-items-center">
+                <div className="header-icon me-4">
+                  <i className="bi bi-house-heart-fill"></i>
+                </div>
+                <div>
+                  <h2 className="fw-bold text-dark mb-1">Smart Housing Advisor</h2>
+                  <p className="text-muted mb-0 fs-6">Find safe and affordable housing options tailored to your needs</p>
+                </div>
               </div>
             </div>
 
-            <Form onSubmit={handleSubmit}>
-              <Accordion defaultActiveKey={['0']} alwaysOpen className="mb-4">
-                {/* Location & Commute Section */}
-                <Accordion.Item eventKey="0" className="border-0">
-                  <Accordion.Header className="bg-light rounded-3 p-3">
-                    <div className="d-flex align-items-center">
-                      <div className="feature-icon me-3">
-                        <i className="bi bi-geo-alt-fill"></i>
-                      </div>
-                      <div>
-                        <h5 className="mb-0 fw-bold">📍 Location & Commute</h5>
-                        <p className="mb-0 text-muted small">Tell us about your location and commute needs</p>
+            {/* Form Section */}
+            <Card className="form-card">
+              <Form onSubmit={handleSubmit}>
+                <div className="form-sections">
+                  {/* Location & Commute Section */}
+                  <div className="form-section mb-5">
+                    <div className="section-header mb-4">
+                      <div className="d-flex align-items-center">
+                        <div className="section-icon-large me-3">
+                          <i className="bi bi-geo-alt-fill"></i>
+                        </div>
+                        <div>
+                          <h4 className="fw-bold text-dark mb-1">Location & Commute</h4>
+                          <p className="text-muted mb-0">Tell us about your location and commute needs</p>
+                        </div>
                       </div>
                     </div>
-                  </Accordion.Header>
-                  <Accordion.Body className="pt-4">
-                    <Row>
+                    
+                    <Row className="g-4">
                       <Col md={6}>
-                        <Form.Group className="mb-4" controlId="location">
-                          <Form.Label className="fw-semibold text-dark">City/Town</Form.Label>
+                        <div className="form-group-modern">
+                          <Form.Label className="form-label-modern">City/Town</Form.Label>
                           <Form.Control
                             type="text"
                             placeholder="e.g. Kisumu, Nairobi, Mombasa"
                             name="location"
                             value={formData.location}
                             onChange={handleChange}
-                            className="rounded-2 py-2"
+                            className="form-control-modern"
                             required
                           />
-                          <Form.Text className="text-muted">
+                          <Form.Text className="form-text-modern">
                             The city where you're looking for housing
                           </Form.Text>
-                        </Form.Group>
+                        </div>
                       </Col>
                       <Col md={6}>
-                        <Form.Group className="mb-4" controlId="destination">
-                          <Form.Label className="fw-semibold text-dark">Workplace Location</Form.Label>
+                        <div className="form-group-modern">
+                          <Form.Label className="form-label-modern">Workplace Location</Form.Label>
                           <Form.Control
                             type="text"
                             placeholder="e.g. CBD, Industrial Area, Westlands"
                             name="destination"
                             value={formData.destination}
                             onChange={handleChange}
-                            className="rounded-2 py-2"
+                            className="form-control-modern"
                           />
-                          <Form.Text className="text-muted">
+                          <Form.Text className="form-text-modern">
                             Where you'll be commuting to daily
                           </Form.Text>
-                        </Form.Group>
+                        </div>
                       </Col>
                     </Row>
 
-                    <Row>
+                    <Row className="g-4 mt-2">
                       <Col md={6}>
-                        <Form.Group className="mb-4" controlId="distance">
-                          <Form.Label className="fw-semibold text-dark">Commute Distance (KM)</Form.Label>
+                        <div className="form-group-modern">
+                          <Form.Label className="form-label-modern">Commute Distance (KM)</Form.Label>
                           <Form.Control
                             type="number"
                             min="0.1"
@@ -209,53 +241,55 @@ const MainApp = ({ currentUser, onLogout }) => {
                             name="distance"
                             value={formData.distance}
                             onChange={handleChange}
-                            className="rounded-2 py-2"
+                            className="form-control-modern"
                           />
-                          <Form.Text className="text-muted">
+                          <Form.Text className="form-text-modern">
                             Approximate distance from home to workplace
                           </Form.Text>
-                        </Form.Group>
+                        </div>
                       </Col>
                       <Col md={6}>
-                        <Form.Group className="mb-4" controlId="time">
-                          <Form.Label className="fw-semibold text-dark">Typical Return Time</Form.Label>
+                        <div className="form-group-modern">
+                          <Form.Label className="form-label-modern">Typical Return Time</Form.Label>
                           <Form.Select
                             name="time"
                             value={formData.time}
                             onChange={handleChange}
-                            className="rounded-2 py-2"
+                            className="form-control-modern"
                           >
                             <option value="Day">Day (Before 6 PM)</option>
                             <option value="Evening">Evening (6 PM - 9 PM)</option>
                             <option value="Night">Night (After 9 PM)</option>
                           </Form.Select>
-                          <Form.Text className="text-muted">
+                          <Form.Text className="form-text-modern">
                             When you typically return home
                           </Form.Text>
-                        </Form.Group>
+                        </div>
                       </Col>
                     </Row>
-                  </Accordion.Body>
-                </Accordion.Item>
+                  </div>
 
-                {/* Preferences Section */}
-                <Accordion.Item eventKey="1" className="border-0">
-                  <Accordion.Header className="bg-light rounded-3 p-3">
-                    <div className="d-flex align-items-center">
-                      <div className="feature-icon me-3">
-                        <i className="bi bi-sliders2-vertical"></i>
-                      </div>
-                      <div>
-                        <h5 className="mb-0 fw-bold">💰 Preferences</h5>
-                        <p className="mb-0 text-muted small">Set your housing preferences and budget</p>
+                  {/* Preferences Section */}
+                  <div className="form-section mb-5">
+                    <div className="section-header mb-4">
+                      <div className="d-flex align-items-center">
+                        <div className="section-icon-large me-3">
+                          <i className="bi bi-sliders2-vertical"></i>
+                        </div>
+                        <div>
+                          <h4 className="fw-bold text-dark mb-1">Preferences</h4>
+                          <p className="text-muted mb-0">Set your housing preferences and budget</p>
+                        </div>
                       </div>
                     </div>
-                  </Accordion.Header>
-                  <Accordion.Body className="pt-4">
-                    <Form.Group className="mb-4" controlId="budget">
-                      <div className="d-flex justify-content-between align-items-center mb-2">
-                        <Form.Label className="fw-semibold text-dark">Monthly Budget (KES)</Form.Label>
-                        <span className="fw-bold text-primary fs-5">{parseInt(formData.budget).toLocaleString()} KES</span>
+
+                    <div className="budget-section mb-4">
+                      <div className="d-flex justify-content-between align-items-center mb-3">
+                        <Form.Label className="form-label-modern mb-0">Monthly Budget (KES)</Form.Label>
+                        <div className="budget-display">
+                          <span className="budget-amount">{parseInt(formData.budget).toLocaleString()}</span>
+                          <span className="budget-currency">KES</span>
+                        </div>
                       </div>
                       <Form.Range
                         name="budget"
@@ -264,108 +298,112 @@ const MainApp = ({ currentUser, onLogout }) => {
                         step="5000"
                         value={formData.budget}
                         onChange={handleChange}
-                        className="mb-2"
+                        className="budget-slider mb-2"
                       />
-                      <div className="input-range-labels">
-                        <span>10,000</span>
-                        <span>25,000</span>
-                        <span>50,000</span>
-                        <span>75,000</span>
-                        <span>100,000</span>
+                      <div className="budget-labels">
+                        <span>10K</span>
+                        <span>25K</span>
+                        <span>50K</span>
+                        <span>75K</span>
+                        <span>100K</span>
                       </div>
-                      <Form.Text className="text-muted">
+                      <Form.Text className="form-text-modern">
                         Your maximum monthly rent budget
                       </Form.Text>
-                    </Form.Group>
+                    </div>
 
-                    <Row>
+                    <Row className="g-4">
                       <Col md={6}>
-                        <Form.Group className="mb-4" controlId="safety">
-                          <Form.Label className="fw-semibold text-dark">Safety Priority</Form.Label>
+                        <div className="form-group-modern">
+                          <Form.Label className="form-label-modern">Safety Priority</Form.Label>
                           <Form.Select
                             name="safety"
                             value={formData.safety}
                             onChange={handleChange}
-                            className="rounded-2 py-2"
+                            className="form-control-modern"
                           >
                             <option value="Low">Standard Safety</option>
                             <option value="Medium">Enhanced Safety</option>
                             <option value="High">Maximum Security</option>
                           </Form.Select>
-                          <Form.Text className="text-muted">
+                          <Form.Text className="form-text-modern">
                             How important is security to you?
                           </Form.Text>
-                        </Form.Group>
+                        </div>
                       </Col>
                       <Col md={6}>
-                        <Form.Group className="mb-4" controlId="arrangement">
-                          <Form.Label className="fw-semibold text-dark">Living Arrangement</Form.Label>
+                        <div className="form-group-modern">
+                          <Form.Label className="form-label-modern">Living Arrangement</Form.Label>
                           <Form.Select
                             name="arrangement"
                             value={formData.arrangement}
                             onChange={handleChange}
-                            className="rounded-2 py-2"
+                            className="form-control-modern"
                           >
                             <option value="Alone">Living Alone</option>
                             <option value="Shared">Shared Accommodation</option>
                             <option value="Family">With Family</option>
                           </Form.Select>
-                          <Form.Text className="text-muted">
+                          <Form.Text className="form-text-modern">
                             Who will be living with you?
                           </Form.Text>
-                        </Form.Group>
+                        </div>
                       </Col>
                     </Row>
 
-                    <Form.Group className="mb-4" controlId="query">
-                      <Form.Label className="fw-semibold text-dark">Additional Concerns</Form.Label>
+                    <div className="form-group-modern mt-4">
+                      <Form.Label className="form-label-modern">Additional Concerns</Form.Label>
                       <Form.Control
                         as="textarea"
-                        rows={3}
+                        rows={4}
                         name="query"
                         value={formData.query}
                         onChange={handleChange}
                         placeholder="Describe any specific safety concerns, accessibility needs, or other preferences..."
-                        className="rounded-2 py-2"
+                        className="form-control-modern textarea-modern"
                       />
-                      <Form.Text className="text-muted">
+                      <Form.Text className="form-text-modern">
                         Any other factors that matter to you in choosing a neighborhood
                       </Form.Text>
-                    </Form.Group>
-                  </Accordion.Body>
-                </Accordion.Item>
-              </Accordion>
+                    </div>
+                  </div>
+                </div>
 
-              <Button
-                variant="primary"
-                type="submit"
-                disabled={loading}
-                className="w-100 py-3 rounded-3 fw-bold fs-5"
-              >
-                {loading ? (
-                  <>
-                    <Spinner
-                      as="span"
-                      animation="border"
-                      size="sm"
-                      role="status"
-                      className="me-2"
-                    />
-                    Analyzing Housing Options...
-                  </>
-                ) : (
-                  <>
-                    <i className="bi bi-search me-2"></i>
-                    Find My Perfect Home
-                  </>
-                )}
-              </Button>
-            </Form>
+                <div className="submit-section">
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    disabled={loading}
+                    className="submit-btn"
+                  >
+                    {loading ? (
+                      <>
+                        <Spinner
+                          as="span"
+                          animation="border"
+                          size="sm"
+                          role="status"
+                          className="me-3"
+                        />
+                        <span>Analyzing Housing Options...</span>
+                      </>
+                    ) : (
+                      <>
+                        <i className="bi bi-search me-3"></i>
+                        <span>Find My Perfect Home</span>
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </Form>
+            </Card>
 
             {error && (
-              <Alert variant="warning" className="mt-4 rounded-3">
-                <i className="bi bi-exclamation-triangle-fill me-2"></i>
-                {error}
+              <Alert variant="warning" className="mt-4 modern-alert">
+                <div className="d-flex align-items-center">
+                  <i className="bi bi-exclamation-triangle-fill me-3 fs-5"></i>
+                  <span>{error}</span>
+                </div>
               </Alert>
             )}
 
@@ -479,25 +517,31 @@ const MainApp = ({ currentUser, onLogout }) => {
                 </Card.Body>
               </Card>
             )}
-          </Card>
+          </div>
         </Col>
       </Row>
 
-      {/* Mobile logout button */}
-      <div className="d-lg-none mt-3">
-        <Card className="profile-card">
-          <div className="d-flex justify-content-between align-items-center">
-            <div>
-              <h6 className="mb-0 fw-bold">{currentUser?.name || 'Guest'}</h6>
-              <p className="text-muted small mb-0">{currentUser?.email || 'No email'}</p>
+      {/* Mobile Profile Card */}
+      <div className="d-lg-none mt-4">
+        <Card className="mobile-profile-card">
+          <div className="d-flex justify-content-between align-items-center p-3">
+            <div className="d-flex align-items-center">
+              <div className="mobile-avatar me-3">
+                <i className="bi bi-person-fill"></i>
+              </div>
+              <div>
+                <h6 className="mb-0 fw-bold">{currentUser?.name || 'Guest'}</h6>
+                <p className="text-muted small mb-0">{currentUser?.email || 'No email'}</p>
+              </div>
             </div>
             <Button
               variant="outline-primary"
               size="sm"
               onClick={onLogout}
-              className="rounded-2"
+              className="rounded-3 modern-btn"
             >
-              <i className="bi bi-box-arrow-right"></i> Logout
+              <i className="bi bi-box-arrow-right me-1"></i> 
+              <span className="d-none d-sm-inline">Logout</span>
             </Button>
           </div>
         </Card>
