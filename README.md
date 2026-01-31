@@ -75,7 +75,7 @@ These principles guide all implementation decisions:
 
 The application follows a modular architecture with a clean separation of concerns:
 
-* **Frontend**: React application with authentication and responsive UI
+* **Frontend**: ReactJs application with authentication and responsive UI
 * **Backend**: Flask API serving the housing advisory engine
 * **Core Logic**: Deterministic rule-based evaluation of situational risk
 * **AI Layer**: Explanation and reasoning generation (non-decision-making)
