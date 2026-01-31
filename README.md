@@ -1,4 +1,4 @@
- # Housing Safety Advisory Agent with React Frontend
+ # Housing Safety Advisory AI Agent 
 
 An explainable, AI-assisted **decision-support agent** that helps users evaluate housing options by reasoning over **situational safety trade-offs** such as commute patterns, time of travel, budget constraints, and living arrangements.
 
