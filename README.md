@@ -1,225 +1,219 @@
-Housing Safety Advisory AI Agent.
+ # Housing Safety Advisory Agent with React Frontend
+
+An explainable, AI-assisted **decision-support agent** that helps users evaluate housing options by reasoning over **situational safety trade-offs** such as commute patterns, time of travel, budget constraints, and living arrangements.
+
+The system is **advisory, not authoritative**, and is explicitly designed **not** to label neighborhoods, predict crime, or rank locations. It features a React frontend with authentication and a Python Flask backend.
+
+This project is aligned with **UN Sustainable Development Goal 11: Sustainable Cities and Communities**.
 
 
-An explainable, AI-assisted decision-support agent that helps users evaluate housing options by reasoning over situational safety trade-offs such as commute patterns, time of travel, budget constraints, and living arrangements.
 
-The system is advisory, not authoritative, and is explicitly designed not to label neighborhoods, predict crime, or rank locations. It features a React frontend with authentication and a Python Flask backend.
-
-This project is aligned with UN Sustainable Development Goal 11: Sustainable Cities and Communities.
-
-Problem Statement
+## Problem Statement
 
 People making housing decisions often care about safety, but existing tools present major problems:
 
-Crime maps and safety scores stigmatize neighborhoods
+* Crime maps and safety scores stigmatize neighborhoods
+* Black-box models provide recommendations without explanation
+* Many systems treat “safety” as an inherent property of a place rather than a **contextual trade-off**
+* Ethical risks arise from using crime, demographic, or surveillance data
 
-Black-box models provide recommendations without explanation
+In reality, housing safety decisions depend on **situational factors**, such as:
 
-Many systems treat “safety” as an inherent property of a place rather than a contextual trade-off
+* Time of travel (day vs night)
+* Commute length and transport availability
+* Budget constraints
+* Whether someone lives alone or with others
+* Personal risk tolerance
 
-Ethical risks arise from using crime, demographic, or surveillance data
+This project addresses the gap between **unethical prediction systems** and **generic housing advice** by providing an explainable, ethical, and deterministic decision-support agent.
 
-In reality, housing safety decisions depend on situational factors, such as:
 
-Time of travel (day vs night)
+## SDG Alignment
 
-Commute length and transport availability
+This project directly supports **SDG 11: Sustainable Cities and Communities** by:
 
-Budget constraints
+* Promoting informed, inclusive housing decision-making
+* Avoiding stigmatization of communities
+* Supporting transparency and user agency
+* Encouraging sustainable urban living choices based on trade-offs rather than fear-based rankings
 
-Whether someone lives alone or with others
 
-Personal risk tolerance
 
-This project addresses the gap between unethical prediction systems and generic housing advice by providing an explainable, ethical, and deterministic decision-support agent.
+## What This Agent Is / Is Not
 
-SDG Alignment
+### The agent **IS**:
 
-This project directly supports SDG 11: Sustainable Cities and Communities by:
+* Advisory, not authoritative
+* A decision-support system, not a decision-maker
+* Rule-driven with AI-assisted explanations
+* Focused on trade-offs, not predictions
+* Context-aware (user preferences + situational factors)
 
-Promoting informed, inclusive housing decision-making
+### The agent **IS NOT**:
 
-Avoiding stigmatization of communities
+* A crime prediction system
+* A neighborhood or area ranking engine
+* A system that labels places as “safe” or “unsafe”
+* A chatbot giving generic housing advice
+* A system using real crime, surveillance, demographic, or socioeconomic data
 
-Supporting transparency and user agency
 
-Encouraging sustainable urban living choices based on trade-offs rather than fear-based rankings
 
-What This Agent Is / Is Not
-The agent IS:
-
-Advisory, not authoritative
-
-A decision-support system, not a decision-maker
-
-Rule-driven with AI-assisted explanations
-
-Focused on trade-offs, not predictions
-
-Context-aware (user preferences + situational factors)
-
-The agent IS NOT:
-
-A crime prediction system
-
-A neighborhood or area ranking engine
-
-A system that labels places as “safe” or “unsafe”
-
-A chatbot giving generic housing advice
-
-A system using real crime, surveillance, demographic, or socioeconomic data
-
-Core Design Principles
+## Core Design Principles
 
 These principles guide all implementation decisions:
 
-Explainability first – every output is traceable to explicit rules and user inputs
+1. **Explainability first** – every output is traceable to explicit rules and user inputs
+2. **Ethical neutrality** – no stigmatizing language, assumptions, or labels
+3. **AI as a component** – rules decide, AI explains
+4. **Minimal but structured data** – no heavy datasets or opaque models
+5. **Deterministic core logic** – same inputs always produce the same evaluation
 
-Ethical neutrality – no stigmatizing language, assumptions, or labels
 
-AI as a component – rules decide, AI explains
 
-Minimal but structured data – no heavy datasets or opaque models
-
-Deterministic core logic – same inputs always produce the same evaluation
-
-Architecture Overview
+## Architecture Overview
 
 The application follows a modular architecture with a clean separation of concerns:
 
-Frontend: React application with authentication and responsive UI
+* **Frontend**: React application with authentication and responsive UI
+* **Backend**: Flask API serving the housing advisory engine
+* **Core Logic**: Deterministic rule-based evaluation of situational risk
+* **AI Layer**: Explanation and reasoning generation (non-decision-making)
+* **Models**: Pydantic models for structured validation
+* **Utils**: Shared helper utilities
 
-Backend: Flask API serving the housing advisory engine
+AI is **never used to decide risk levels**. It is only used to explain outputs generated by deterministic rules.
 
-Core Logic: Deterministic rule-based evaluation of situational risk
 
-AI Layer: Explanation and reasoning generation (non-decision-making)
 
-Models: Pydantic models for structured validation
+## AI Usage
 
-Utils: Shared helper utilities
+The system integrates **Google Gemini** strictly for **explanation and reasoning generation**.
 
-AI is never used to decide risk levels. It is only used to explain outputs generated by deterministic rules.
+### AI **does**:
 
-AI Usage
+* Translate rule outputs into natural language
+* Explain why certain trade-offs exist
+* Summarize reasoning
+* Answer “why” and “why not” questions
 
-The system integrates Google Gemini strictly for explanation and reasoning generation.
+### AI **does not**:
 
-AI does:
-
-Translate rule outputs into natural language
-
-Explain why certain trade-offs exist
-
-Summarize reasoning
-
-Answer “why” and “why not” questions
-
-AI does not:
-
-Decide risk levels
-
-Predict crime
-
-Rank neighborhoods
-
-Override rule-based outputs
+* Decide risk levels
+* Predict crime
+* Rank neighborhoods
+* Override rule-based outputs
 
 All evaluations are produced by deterministic logic; AI operates downstream as an explanation layer.
 
-Features
 
-Explainable Decision Support: Clear reasoning for every recommendation
 
-Situational Safety Analysis: Evaluates commute patterns, travel times, and living context
+## Features
 
-Budget-Conscious Trade-offs: Balances safety considerations with affordability
+* **Explainable Decision Support**: Clear reasoning for every recommendation
+* **Situational Safety Analysis**: Evaluates commute patterns, travel times, and living context
+* **Budget-Conscious Trade-offs**: Balances safety considerations with affordability
+* **Ethical Guardrails**: Refuses and reframes unsafe or biased queries
+* **Deterministic Logic**: Same inputs → same outputs
+* **React Frontend**: Modern UI with authentication
+* **Python Backend**: Flask API serving the advisory engine
+* **Location Context**: Currently optimized for Kisumu, Kenya (without labeling areas)
 
-Ethical Guardrails: Refuses and reframes unsafe or biased queries
 
-Deterministic Logic: Same inputs → same outputs
 
-React Frontend: Modern UI with authentication
+## Trade-offs and Limitations
 
-Python Backend: Flask API serving the advisory engine
+* The system **does not use real crime data**, which limits predictive accuracy by design
+* Outputs are **advisory**, not guarantees of safety
+* The agent evaluates **situational risk**, not actual incidents
+* Geographic optimization is currently limited to Kisumu, Kenya
+* Recommendations depend on the quality and completeness of user inputs
 
-Location Context: Currently optimized for Kisumu, Kenya (without labeling areas)
+These trade-offs are intentional to ensure **ethical neutrality, explainability, and safety**.
 
-Trade-offs and Limitations
 
-The system does not use real crime data, which limits predictive accuracy by design
 
-Outputs are advisory, not guarantees of safety
+## Data Strategy
 
-The agent evaluates situational risk, not actual incidents
-
-Geographic optimization is currently limited to Kisumu, Kenya
-
-Recommendations depend on the quality and completeness of user inputs
-
-These trade-offs are intentional to ensure ethical neutrality, explainability, and safety.
-
-Data Strategy
-
-No real crime datasets
-
-No real-time feeds
-
-No surveillance or demographic data
-
-Uses small, static, explainable reference values
+* No real crime datasets
+* No real-time feeds
+* No surveillance or demographic data
+* Uses small, static, explainable reference values
 
 All assumptions are documented in code comments.
 
-Prerequisites
 
-Python 3.10 or higher
 
-Node.js and npm (for the React frontend)
+## Prerequisites
 
-Google Gemini API Key
+* Python 3.10 or higher
+* Node.js and npm (for the React frontend)
+* Google Gemini API Key
 
-Quick Start
-1. Set up your environment
+
+
+## Quick Start
+
+### 1. Set up your environment
+
+```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
+```
 
-2. Set Up Environment Variables
+### 2. Set Up Environment Variables
+
+```bash
 cp .env.example .env
 nano .env
+```
 
-3. Install and Build the Frontend
+### 3. Install and Build the Frontend
+
+```bash
 cd frontend
 npm install
 npm run build
+```
 
-4. Run the Application
+### 4. Run the Application
+
+```bash
 python api_server.py
+```
+
+The application will be available at `http://localhost:5000`.
 
 
-The application will be available at http://localhost:5000.
 
-Development
-Frontend Development
+## Development
+
+### Frontend Development
+
+```bash
 cd frontend
 npm start
+```
 
-Backend Development
+### Backend Development
+
+```bash
 python api_server.py
-
+```
 
 Backend endpoints:
 
-POST /api/housing-recommendations
+* `POST /api/housing-recommendations`
+* `GET /api/health`
 
-GET /api/health
 
-Project Structure
 
-(unchanged — retained exactly as provided)
+## Project Structure
 
+*(unchanged — retained exactly as provided)*
+
+```
 housing-safety-advisory-agent/
 ├── README.md
 ├── api_server.py
@@ -234,27 +228,28 @@ housing-safety-advisory-agent/
 ├── frontend/
 ├── tests/
 └── .env
+```
 
-Ethical Constraints (Hard Rules)
 
-Never label locations as safe or unsafe
 
-Never rank neighborhoods by crime
+## Ethical Constraints (Hard Rules)
 
-Avoid demographic or socioeconomic assumptions
+* Never label locations as safe or unsafe
+* Never rank neighborhoods by crime
+* Avoid demographic or socioeconomic assumptions
+* Include advisory disclaimers in all outputs
 
-Include advisory disclaimers in all outputs
 
-Authors
 
-Flovian Atieno
+## Authors
 
-Anthony Oduor
+* Flovian Atieno 
+* Anthony Oduor
+* Stephen Oginga
+* Margaret Kerubo
+* Michelle Wanjiru
 
-Stephen Oginga
 
-Margaret Kerubo
+> **Reminder:** If a feature does not support decision-making or explainability, it does not belong in this agent.
 
-Michelle Kangethe
-
-Reminder: If a feature does not support decision-making or explainability, it does not belong in this agent.
+ 
