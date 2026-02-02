@@ -3,8 +3,8 @@ import axios from 'axios';
 
 // Create an axios instance with base configuration
 const apiClient = axios.create({
-  baseURL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000', // Default to local development
-  timeout: 30000, // 30 seconds timeout
+  baseURL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000', // Backend runs on port 8000
+  timeout: 60000, // 60 seconds timeout for AI responses
   headers: {
     'Content-Type': 'application/json',
   }
