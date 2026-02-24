@@ -30,22 +30,28 @@ backend/
 
 ## Setup
 
-1. Install dependencies:
+1. Create virtual environment:
 ```bash
 cd backend
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+2. Install dependencies:
+```bash
 pip install -r requirements.txt
 ```
 
-2. Configure environment variables in root `.env`:
+3. Configure environment variables in root `.env`:
 ```bash
 AI_PROVIDER=openai  # or gemini
 OPENAI_API_KEY=your_key
 GEMINI_API_KEY=your_key
 ```
 
-3. Run the server:
+4. Run the server:
 ```bash
-python server.py
+python3 server.py
 ```
 
 ## API Endpoints
