@@ -1,8 +1,6 @@
 
 import json
 from typing import List
-from google import genai
-from google.genai import types
 from src.models.housing_models import HousingRequirements, NeighborhoodRecommendation, Message
 
 
@@ -13,7 +11,7 @@ def research_neighborhoods(
     """
     Researches and recommends neighborhoods based on user requirements.
     """
-    from src.core.config import client  # Import here to avoid circular dependencies
+    from src.core.config import ai_provider
 
     prompt = f"""You are a housing expert specializing in Kenyan cities, particularly {requirements.target_location}.
 
@@ -58,14 +56,11 @@ Return your response in JSON format matching this structure:
 
 Return ONLY valid JSON, no markdown formatting."""
 
-    response = client.models.generate_content(
-        model="models/gemini-flash-latest",  # Updated model name
-        contents=prompt,
-        config=types.GenerateContentConfig(
-            temperature=0.5,
-            response_mime_type="application/json"
-        ),
+    response_text = ai_provider.generate_content(
+        contents=[{"role": "user", "content": prompt}],
+        temperature=0.5,
+        response_format="json"
     )
 
-    parsed = json.loads(response.text)
+    parsed = json.loads(response_text)
     return NeighborhoodRecommendation(**parsed)
