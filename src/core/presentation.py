@@ -1,8 +1,6 @@
 
 
 from typing import List
-from google import genai
-from google.genai import types
 from src.models.housing_models import NeighborhoodRecommendation, HousingRequirements, Message
 
 
@@ -14,7 +12,7 @@ def present_recommendations(
     """
     Formats and presents recommendations in a user-friendly way.
     """
-    from src.core.config import client  # Import here to avoid circular dependencies
+    from src.core.config import ai_provider
 
     prompt = f"""You are a helpful housing assistant presenting neighborhood recommendations.
 
@@ -38,10 +36,10 @@ Workplace: {requirements.workplace_location}
 Recommendations JSON:
 {recommendations.model_dump_json()}"""
 
-    response = client.models.generate_content(
-        model="models/gemini-flash-latest",  # Updated model name
-        contents=prompt,
-        config=types.GenerateContentConfig(temperature=0.7),
+    response_text = ai_provider.generate_content(
+        contents=[{"role": "user", "content": prompt}],
+        temperature=0.7,
+        response_format="text"
     )
 
-    return response.text or "Here are your recommendations."
+    return response_text or "Here are your recommendations."

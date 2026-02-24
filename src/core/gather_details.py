@@ -1,7 +1,5 @@
 
 from typing import List
-from google import genai
-from google.genai import types
 from src.models.housing_models import HousingRequirements, Message
 
 
@@ -12,7 +10,7 @@ def gather_missing_details(
     """
     Asks user for missing information in a friendly way.
     """
-    from src.core.config import client  # Import here to avoid circular dependencies
+    from src.core.config import ai_provider
     
     missing_items = []
 
@@ -33,10 +31,10 @@ The user is missing these details: {', '.join(missing_items)}
 Ask for the missing information in a conversational, friendly way. Don't overwhelm them - ask naturally.
 Keep your response concise (2-3 sentences max)."""
 
-    response = client.models.generate_content(
-        model="models/gemini-flash-latest",  # Updated model name
-        contents=prompt,
-        config=types.GenerateContentConfig(temperature=0.7),
+    response_text = ai_provider.generate_content(
+        contents=[{"role": "user", "content": prompt}],
+        temperature=0.7,
+        response_format="text"
     )
 
-    return response.text or "Could you provide more details about your relocation?"
+    return response_text or "Could you provide more details about your relocation?"

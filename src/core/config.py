@@ -1,9 +1,8 @@
-import os
-from google import genai
 from dotenv import load_dotenv
+from src.ai import get_ai_provider
 
 # Load environment variables
 load_dotenv()
 
-# Initialize Gemini client
-client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
+# Initialize AI provider (Gemini or OpenAI based on AI_PROVIDER env var)
+ai_provider = get_ai_provider()
