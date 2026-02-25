@@ -1,35 +1,15 @@
-
-from flask import Flask, request, jsonify, send_from_directory
-from flask_cors import CORS
-import os
-import sys
+from flask import Blueprint, request, jsonify
 import logging
+from app.services import HousingAdvisoryService
 
-# Add the parent directory to the path so we can import our modules
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
-from src.core.agent_orchestrator import run_housing_agent
-
-app = Flask(__name__, static_folder='frontend/build', static_url_path='/')
-
-CORS(app)  # Enable CORS for all routes
-
-# Configure logging
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def serve(path):
-    """Serve the React app"""
-    if path != "" and os.path.exists(app.static_folder + '/' + path):
-        return send_from_directory(app.static_folder, path)
-    else:
-        return send_from_directory(app.static_folder, 'index.html')
+api_bp = Blueprint('api', __name__, url_prefix='/api')
 
-@app.route('/api/housing-recommendations', methods=['POST'])
+
+@api_bp.route('/housing-recommendations', methods=['POST'])
 def get_housing_recommendations():
-    """Endpoint to get housing recommendations based on user input"""
+    """Endpoint to get housing recommendations based on user input."""
     try:
         data = request.get_json()
 
@@ -57,8 +37,9 @@ def get_housing_recommendations():
 
         logger.info(f"Processing housing recommendation request for location: {location}")
 
-        # Run the housing agent with the user input
-        result = run_housing_agent(user_input)
+        # Initialize service on demand
+        housing_service = HousingAdvisoryService()
+        result = housing_service.process_housing_request(user_input)
 
         return jsonify(result)
 
@@ -69,10 +50,8 @@ def get_housing_recommendations():
             'message': str(e)
         }), 500
 
-@app.route('/api/health', methods=['GET'])
-def health_check():
-    """Health check endpoint"""
-    return jsonify({'status': 'OK', 'service': 'Housing Safety Advisory Agent'})
 
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+@api_bp.route('/health', methods=['GET'])
+def health_check():
+    """Health check endpoint."""
+    return jsonify({'status': 'OK', 'service': 'Housing Safety Advisory Agent'})
