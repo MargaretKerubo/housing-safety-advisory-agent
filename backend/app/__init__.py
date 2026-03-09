@@ -5,6 +5,7 @@ import os
 
 from app.config import Config
 from app.api import api_bp
+from app.api.agent_routes import agent_bp
 
 
 def create_app(config=Config):
@@ -19,6 +20,7 @@ def create_app(config=Config):
     
     # Register blueprints
     app.register_blueprint(api_bp)
+    app.register_blueprint(agent_bp)
     
     # Serve React frontend
     @app.route('/', defaults={'path': ''})
