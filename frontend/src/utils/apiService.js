@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // Create an axios instance with base configuration
 const apiClient = axios.create({
-  baseURL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000', // Default to local development
+  baseURL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000',
   timeout: 120000, // 120 seconds timeout (increased for AI processing)
   headers: {
     'Content-Type': 'application/json',
@@ -42,8 +42,17 @@ const apiService = {
   // Get housing recommendations based on user input
   getHousingRecommendations: async (inputData) => {
     try {
-      const response = await apiClient.post('/api/housing-recommendations', inputData);
-      return response.data;
+      // Step 1: submit and get task_id
+      const { data: task } = await apiClient.post('/api/housing-recommendations', inputData);
+
+      // Step 2: poll until completed or failed
+      while (true) {
+        await new Promise(r => setTimeout(r, 1500));
+        const { data } = await apiClient.get(`/api/tasks/${task.task_id}/status`);
+
+        if (data.status === 'completed') return data.result;
+        if (data.status === 'failed') throw new Error(data.error || 'Task failed');
+      }
     } catch (error) {
       throw error.response?.data || error.message;
     }
