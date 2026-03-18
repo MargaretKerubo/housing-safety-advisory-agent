@@ -40,21 +40,50 @@ apiClient.interceptors.response.use(
 // API endpoints
 const apiService = {
   // Get housing recommendations based on user input
-  getHousingRecommendations: async (inputData) => {
-    try {
-      // Step 1: submit and get task_id
-      const { data: task } = await apiClient.post('/api/housing-recommendations', inputData);
+  getHousingRecommendations: async (inputData, onProgress) => {
+    const BASE = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
 
-      // Step 2: poll until completed or failed
-      while (true) {
-        await new Promise(r => setTimeout(r, 1500));
-        const { data } = await apiClient.get(`/api/tasks/${task.task_id}/status`);
+    // Step 1: submit
+    const { data: task } = await apiClient.post('/api/housing-recommendations', inputData);
+    const taskId = task.task_id;
 
-        if (data.status === 'completed') return data.result;
-        if (data.status === 'failed') throw new Error(data.error || 'Task failed');
-      }
-    } catch (error) {
-      throw error.response?.data || error.message;
+    // Step 2: SSE (primary)
+    const sseResult = await new Promise((resolve, reject) => {
+      let settled = false;
+      const es = new EventSource(`${BASE}/api/tasks/${taskId}/stream`);
+
+      const finish = (fn, val) => {
+        if (settled) return;
+        settled = true;
+        es.close();
+        fn(val);
+      };
+
+      es.onmessage = (e) => {
+        try {
+          const data = JSON.parse(e.data);
+          if (data.error) return finish(reject, new Error(data.error));
+          if (onProgress) onProgress(data.current_step, data.progress);
+          if (data.status === 'completed') finish(resolve, data.result);
+          if (data.status === 'failed') finish(reject, new Error(data.error || 'Task failed'));
+        } catch { finish(reject, new Error('SSE parse error')); }
+      };
+
+      es.onerror = () => finish(reject, new Error('SSE connection failed'));
+
+      // Safety timeout — fall through to polling if SSE stalls for 90s
+      setTimeout(() => finish(reject, new Error('SSE timeout')), 90000);
+    }).catch(() => null); // null signals fallback
+
+    if (sseResult) return sseResult;
+
+    // Step 3: polling fallback
+    while (true) {
+      await new Promise(r => setTimeout(r, 1500));
+      const { data } = await apiClient.get(`/api/tasks/${taskId}/status`);
+      if (onProgress) onProgress(data.current_step, data.progress);
+      if (data.status === 'completed') return data.result;
+      if (data.status === 'failed') throw new Error(data.error || 'Task failed');
     }
   },
 

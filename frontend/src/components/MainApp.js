@@ -30,6 +30,7 @@ const MainApp = ({ currentUser, onLogout }) => {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [progressStep, setProgressStep] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,6 +45,7 @@ const MainApp = ({ currentUser, onLogout }) => {
     setError('');
     setResult(null);
     setLoading(true);
+    setProgressStep('');
 
     // Check for forbidden terms
     const forbidden = ["dangerous", "ghetto", "crime", "sketchy"];
@@ -67,7 +69,9 @@ const MainApp = ({ currentUser, onLogout }) => {
       };
 
       // Call the backend API to get housing recommendations
-      const response = await apiService.getHousingRecommendations(inputData);
+      const response = await apiService.getHousingRecommendations(inputData, (step) => {
+        setProgressStep(step);
+      });
 
       // Process the response based on the actual format from our backend
       if (response.status === 'success') {
@@ -385,7 +389,7 @@ const MainApp = ({ currentUser, onLogout }) => {
                           role="status"
                           className="me-3"
                         />
-                        <span>Analyzing Housing Options...</span>
+                        <span>{progressStep || 'Analyzing Housing Options...'}</span>
                       </>
                     ) : (
                       <>
