@@ -1,7 +1,10 @@
 # Sequence Diagrams
 
-This document shows the interaction between every component over time using Mermaid diagrams. These diagrams render automatically in GitHub, GitLab, and most modern documentation tools.
+This document shows the interaction between every component over time.
 
+## What to install on vscode
+
+If this document does not render as diagrams, you will need to install the extension: *Markdown Preview Mermaid Support* by Matt Bierner.
 ---
 
 ## Happy Path — Complete Request
