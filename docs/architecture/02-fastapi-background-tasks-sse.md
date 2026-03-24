@@ -18,13 +18,16 @@ FastAPI solves this because it is built on an **async event loop** (via `uvicorn
 
 FastAPI being async does not automatically make everything fast. The OpenAI and Gemini SDKs make regular blocking HTTP calls — they are synchronous. If you call them directly inside an `async` route handler, you block the entire event loop, which is worse than Flask because it freezes every concurrent request at once.
 
-The solution is `run_in_threadpool`. It offloads a synchronous function to a separate thread so the event loop stays free.
 
 ```
 Without run_in_threadpool:
   Event loop → async route → AI call (blocks for 60s) → event loop frozen
   Every other request is stuck waiting
+```
 
+The solution is `run_in_threadpool`. It offloads a synchronous function to a separate thread so the event loop stays free.
+
+```
 With run_in_threadpool:
   Event loop → async route → thread pool → AI call (60s in separate thread)
   Event loop stays free, handles SSE streams and new requests normally
@@ -60,12 +63,12 @@ return TaskResponse(task_id=task_id, status="pending")
 `process_housing_task` runs in a thread pool. It calls the housing service step by step, updating the task's progress in memory after each step:
 
 ```
-progress=10  → 🏠 Starting analysis
-progress=25  → 📋 Analyzing requirements
-progress=40  → ✅ Requirements complete
-progress=50  → 🔍 Researching neighborhoods
-progress=75  → 📝 Preparing recommendations
-progress=100 → ✅ Complete
+progress=10   Starting analysis
+progress=25   Analyzing requirements
+progress=40   Requirements complete
+progress=50   Researching neighborhoods
+progress=75   Preparing recommendations
+progress=100  Complete
 ```
 
 ### Step 4 — Client streams progress via SSE
@@ -108,7 +111,7 @@ Each SSE message is a JSON-serialised task object:
   "task_id": "abc-123",
   "status": "processing",
   "progress": 50,
-  "current_step": "🔍 Researching neighborhoods...",
+  "current_step": "Researching neighborhoods...",
   "result": null,
   "error": null
 }
@@ -143,7 +146,7 @@ if (client.hasResumableTask()) {
 }
 ```
 
-**Limitation:** tasks are held in the server's memory. If the server restarts while a task is in progress, the task is lost and the client will receive a 404 when it tries to reconnect.
+**Limitation:** tasks are held in the server's memory. If the server restarts while a task is in progress, the task is lost and the client will receive a 404 when it tries to reconnect. A potential future solution is to use redis to store such running tasks as opposed to saving them in an inmemory map.
 
 ---
 
