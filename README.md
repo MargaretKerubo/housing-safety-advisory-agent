@@ -14,7 +14,9 @@ housing-safety-advisory-agent/
 │   │   ├── schemas/     # Pydantic data models
 │   │   └── config/      # Configuration
 │   ├── server.py        # Entry point
-│   └── requirements.txt
+│   ├── requirements.txt
+│   ├── .env             # Environment variables (not in git)
+│   └── .env.example     # Environment template
 ├── frontend/            # React application
 │   ├── src/
 │   │   ├── components/
@@ -23,8 +25,7 @@ housing-safety-advisory-agent/
 │   └── package.json
 ├── docs/                # Documentation
 ├── tests/               # Test files
-├── .env                 # Environment variables (not in git)
-└── .env.example         # Environment template
+└── README.md
 
 ```
 
@@ -35,8 +36,8 @@ housing-safety-advisory-agent/
 Copy `.env.example` to `.env` and configure:
 
 ```bash
-cp .env.example .env
-nano .env
+cp backend/.env.example backend/.env
+nano backend/.env
 ```
 
 ```bash
