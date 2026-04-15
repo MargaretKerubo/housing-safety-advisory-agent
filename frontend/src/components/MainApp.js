@@ -47,25 +47,73 @@ const MainApp = ({ currentUser, onLogout }) => {
     setLoading(true);
     setProgressStep('');
 
-    // Check for forbidden terms
-    const forbidden = ["dangerous", "ghetto", "crime", "sketchy"];
-    if (forbidden.some(word => formData.query.toLowerCase().includes(word))) {
-      setError('🛡️ REFRAME: I can help you compare housing options based on situational factors like lighting and transit proximity.');
+    // --- INPUT VALIDATION ---
+    const trimmedLocation = formData.location.trim();
+    const trimmedDestination = formData.destination.trim();
+    const trimmedQuery = formData.query.trim();
+    const distanceVal = parseFloat(formData.distance);
+    const budgetVal = parseInt(formData.budget);
+
+    // Basic required field check
+    if (!trimmedLocation) {
+      setError('Please provide a city or town.');
       setLoading(false);
       return;
     }
 
+    if (!trimmedDestination) {
+      setError('Please provide a workplace location.');
+      setLoading(false);
+      return;
+    }
+
+    // Distance validation
+    if (isNaN(distanceVal) || distanceVal <= 0) {
+      setError('Please provide a valid commute distance greater than 0.');
+      setLoading(false);
+      return;
+    }
+
+    if (distanceVal > 150) {
+      setError('Commute distance seems too high. Please provide a distance within 150 KM.');
+      setLoading(false);
+      return;
+    }
+
+    // Budget validation
+    if (isNaN(budgetVal) || budgetVal < 5000) {
+      setError('Budget must be at least 5,000 KES.');
+      setLoading(false);
+      return;
+    }
+
+    // Query length validation
+    if (trimmedQuery.length > 1000) {
+      setError('Additional concerns are too long. Please keep it under 1000 characters.');
+      setLoading(false);
+      return;
+    }
+
+    // Check for forbidden terms
+    const forbidden = ["dangerous", "ghetto", "crime", "sketchy"];
+    if (forbidden.some(word => trimmedQuery.toLowerCase().includes(word))) {
+      setError('🛡️ REFRAME: I can help you compare housing options based on situational factors like lighting and transit proximity.');
+      setLoading(false);
+      return;
+    }
+    // --- END INPUT VALIDATION ---
+
     try {
       // Prepare the data to send to the backend
       const inputData = {
-        location: formData.location,
-        destination: formData.destination,
-        distance: parseFloat(formData.distance),
+        location: trimmedLocation,
+        destination: trimmedDestination,
+        distance: distanceVal,
         time: formData.time,
-        budget: parseInt(formData.budget),
+        budget: budgetVal,
         safety: formData.safety,
         arrangement: formData.arrangement,
-        query: formData.query
+        query: trimmedQuery
       };
 
       // Call the backend API to get housing recommendations
@@ -226,6 +274,7 @@ const MainApp = ({ currentUser, onLogout }) => {
                             value={formData.destination}
                             onChange={handleChange}
                             className="form-control-modern"
+                            required
                           />
                           <Form.Text className="form-text-modern">
                             Where you'll be commuting to daily
