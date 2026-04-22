@@ -6,7 +6,7 @@ An explainable, AI-assisted decision-support agent that helps users evaluate hou
 
 ```
 housing-safety-advisory-agent/
-├── backend/              # Flask API server
+├── backend/              # FastAPI server
 │   ├── app/
 │   │   ├── api/         # API routes
 │   │   ├── services/    # Business logic
@@ -90,7 +90,7 @@ This script opens both backend and frontend in separate terminals.
 
 ## Architecture
 
-- **Backend**: Flask REST API with service layer architecture
+- **Backend**: FastAPI with service layer architecture
 - **Frontend**: React SPA with responsive design
 - **AI Layer**: Provider abstraction supporting multiple AI services
 - **Data Models**: Pydantic schemas for validation

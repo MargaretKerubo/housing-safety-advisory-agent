@@ -36,7 +36,7 @@ backend/
 │   ├── ai/         ← AI provider abstraction (Gemini, OpenAI, etc.)
 │   ├── schemas/    ← Data models (the shape of requests and responses)
 │   └── config/     ← Configuration loaded from the .env file
-├── server_fastapi.py   ← Entry point — run this to start the server
+├── server.py   ← Entry point — run this to start the server
 └── requirements.txt    ← Python dependencies
 ```
 
@@ -126,9 +126,9 @@ cp .env.example .env
 
 # 2. Start the backend
 cd backend
-python -m venv venv && source venv/bin/activate
+python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-python server_fastapi.py
+python3 server.py
 
 # 3. Start the frontend (in a separate terminal)
 cd frontend

@@ -5,10 +5,10 @@
 ```
 backend/
 ├── app/
-│   ├── __init__.py           # Flask app factory
+│   ├── main.py              # FastAPI app
 │   ├── api/                  # API routes
 │   │   ├── __init__.py
-│   │   └── routes.py         # Housing recommendation endpoints
+│   │   └── routes_fastapi.py # Housing recommendation endpoints
 │   ├── services/             # Business logic
 │   │   ├── __init__.py
 │   │   └── housing_service.py # Housing advisory service

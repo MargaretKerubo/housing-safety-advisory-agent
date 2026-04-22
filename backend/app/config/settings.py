@@ -9,7 +9,7 @@ load_dotenv(project_root / '.env')
 class Config:
     """Application configuration."""
     
-    # Flask
+    # Server
     DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
     HOST = os.getenv('HOST', '0.0.0.0')
     PORT = int(os.getenv('PORT', 5000))

@@ -6,7 +6,7 @@ An explainable, AI-assisted decision-support agent for housing evaluation.
 
 ```
 housing-safety-advisory-agent/
-├── backend/              # Flask API server
+├── backend/              # FastAPI server
 │   ├── app/
 │   │   ├── api/         # API routes
 │   │   ├── services/    # Business logic
@@ -62,7 +62,7 @@ PORT=5000
 
 ## Architecture
 
-- **Backend**: Flask REST API with service layer architecture
+- **Backend**: FastAPI with service layer architecture
 - **Frontend**: React SPA with Bootstrap UI
 - **AI Layer**: Provider abstraction supporting Gemini and OpenAI
 - **Data Models**: Pydantic schemas for validation
