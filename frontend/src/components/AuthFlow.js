@@ -22,14 +22,22 @@ const AuthFlow = ({ onLogin }) => {
     e.preventDefault();
     setError('');
 
+    const email = loginForm.email.trim();
+    const password = loginForm.password;
+
+    if (!email || !password) {
+      setError('Please fill in all fields');
+      return;
+    }
+
     const usersDb = getUsersDb();
-    const user = usersDb[loginForm.email];
+    const user = usersDb[email];
 
     if (user) {
       // In a real app, you'd verify the password here
       onLogin({
         name: user.name,
-        email: loginForm.email,
+        email: email,
         emergency: user.emergency
       });
     } else {
@@ -42,17 +50,39 @@ const AuthFlow = ({ onLogin }) => {
     setError('');
     setSuccess('');
 
+    const name = signupForm.name.trim();
+    const email = signupForm.email.trim();
+    const password = signupForm.password;
+    const emergency = signupForm.emergency.trim();
+
+    // Basic Validation
+    if (!name || !email || !password) {
+      setError('Name, Email and Password are required');
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid email address');
+      return;
+    }
+
     const usersDb = getUsersDb();
 
-    if (usersDb[signupForm.email]) {
+    if (usersDb[email]) {
       setError('Email already registered');
       return;
     }
 
     // Add user to database
-    usersDb[signupForm.email] = {
-      name: signupForm.name,
-      emergency: signupForm.emergency
+    usersDb[email] = {
+      name: name,
+      emergency: emergency
     };
     setUsersDb(usersDb);
 
