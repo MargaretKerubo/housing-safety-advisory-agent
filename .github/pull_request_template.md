@@ -1,61 +1,27 @@
-## What does this PR do?
-- Brief explanation of the feature/fix
+## Type of change
 
-## Why is this needed?
-- Problem being solved
+- [ ] Bug fix
+- [ ] New feature
+- [ ] Enhancement (improvement to existing feature)
+- [ ] Refactor (no functional changes)
+- [ ] Documentation
+- [ ] CI/Build/Config
 
-## Changes made
-- Bullet list of key changes
+## What changed and why
+
+<!-- Briefly describe what this PR does and the motivation behind it. -->
 
 ## How to test
-- Steps to verify
 
-## Screenshots (if UI)
-- Attach if applicable
+<!-- Steps a reviewer can follow to verify the changes work. -->
 
-
----
-
-## Commit Message Compliance (MANDATORY)
-
-All commits in this PR MUST follow:
-
-type: short description
-
-OR (recommended):
-type(scope): short description
-
-### Allowed Types:
-- feat
-- fix
-- chore
-- refactor
-- docs
-- style
-- test
-- perf
-- build
-- ci
-- revert
-- init
-- config
-
-### Rules:
-- lowercase only
-- under 72 characters
-- present tense
-- specific (no vague messages)
-
-### Examples:
-- feat(auth): add JWT login
-- fix(api): handle null response
-- refactor(ui): clean dashboard layout
-
----
+1. 
 
 ## Checklist
-- [ ] PR follows required structure
-- [ ] Commit messages follow handbook rules
-- [ ] No unrelated changes included
-- [ ] Branch created from `dev`
-- [ ] Ready for review
+
+- [ ] Tested locally
+- [ ] No new environment variables (or `.env.example` updated)
+- [ ] Database migrations included if schema changed
+- [ ] No sensitive data committed
+
+Closes #
