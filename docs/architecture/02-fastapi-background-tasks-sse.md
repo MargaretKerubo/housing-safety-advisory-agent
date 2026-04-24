@@ -168,7 +168,7 @@ It exposes three methods:
 
 ## Application Entry Point
 
-`server_fastapi.py` starts the server using `uvicorn`, which is the ASGI server that runs the FastAPI application:
+`server.py` starts the server using `uvicorn`, which is the ASGI server that runs the FastAPI application:
 
 ```python
 uvicorn.run(
