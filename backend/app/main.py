@@ -7,8 +7,13 @@ from pathlib import Path
 
 from app.config import Config
 from app.api.routes_fastapi import router
+from app.api.auth import router as auth_router
+from app.models.user import init_db
 
 logging.basicConfig(level=logging.INFO)
+
+# Initialize database
+init_db()
 
 app = FastAPI(title="Housing Safety Advisory Agent")
 
@@ -20,6 +25,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(auth_router, prefix="/api")
 app.include_router(router)
 
 # Serve React frontend if built

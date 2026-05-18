@@ -126,6 +126,9 @@ const apiService = {
   login: async (credentials) => {
     try {
       const response = await apiClient.post('/api/auth/login', credentials);
+      if (response.data.access_token) {
+        localStorage.setItem('token', response.data.access_token);
+      }
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -135,6 +138,9 @@ const apiService = {
   register: async (userData) => {
     try {
       const response = await apiClient.post('/api/auth/register', userData);
+      if (response.data.access_token) {
+        localStorage.setItem('token', response.data.access_token);
+      }
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;

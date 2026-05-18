@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Card, Tabs, Tab, Form, Button, Alert, Row, Col } from 'react-bootstrap';
+import { Card, Tabs, Tab, Form, Button, Alert, Spinner } from 'react-bootstrap';
+import apiService from '../utils/apiService';
 
 const AuthFlow = ({ onLogin }) => {
   const [key, setKey] = useState('login');
@@ -7,48 +8,37 @@ const AuthFlow = ({ onLogin }) => {
   const [signupForm, setSignupForm] = useState({ name: '', email: '', emergency: '', password: '' });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  // Mock user database stored in localStorage
-  const getUsersDb = () => {
-    const usersStr = localStorage.getItem('usersDb');
-    return usersStr ? JSON.parse(usersStr) : {};
-  };
-
-  const setUsersDb = (users) => {
-    localStorage.setItem('usersDb', JSON.stringify(users));
-  };
-
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
     const email = loginForm.email.trim();
     const password = loginForm.password;
 
     if (!email || !password) {
       setError('Please fill in all fields');
+      setLoading(false);
       return;
     }
 
-    const usersDb = getUsersDb();
-    const user = usersDb[email];
-
-    if (user) {
-      // In a real app, you'd verify the password here
-      onLogin({
-        name: user.name,
-        email: email,
-        emergency: user.emergency
-      });
-    } else {
-      setError('Invalid email or password');
+    try {
+      const result = await apiService.login({ email, password });
+      onLogin(result.user);
+    } catch (err) {
+      setError(typeof err === 'string' ? err : err.detail || 'Invalid email or password');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleSignupSubmit = (e) => {
+  const handleSignupSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
+    setLoading(true);
 
     const name = signupForm.name.trim();
     const email = signupForm.email.trim();
@@ -58,44 +48,42 @@ const AuthFlow = ({ onLogin }) => {
     // Basic Validation
     if (!name || !email || !password) {
       setError('Name, Email and Password are required');
+      setLoading(false);
       return;
     }
 
     if (password.length < 6) {
       setError('Password must be at least 6 characters long');
+      setLoading(false);
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setError('Please enter a valid email address');
+      setLoading(false);
       return;
     }
 
-    const usersDb = getUsersDb();
-
-    if (usersDb[email]) {
-      setError('Email already registered');
-      return;
+    try {
+      const result = await apiService.register({
+        name,
+        email,
+        password,
+        emergency_contact: emergency
+      });
+      
+      setSuccess('Account created successfully!');
+      
+      // Small delay to show success then login
+      setTimeout(() => {
+        onLogin(result.user);
+      }, 1000);
+    } catch (err) {
+      setError(typeof err === 'string' ? err : err.detail || 'Registration failed. Email might already be in use.');
+    } finally {
+      setLoading(false);
     }
-
-    // Add user to database
-    usersDb[email] = {
-      name: name,
-      emergency: emergency
-    };
-    setUsersDb(usersDb);
-
-    setSuccess('Account created successfully! Please go to the Login tab.');
-
-    // Reset form
-    setSignupForm({ name: '', email: '', emergency: '', password: '' });
-    
-    // Auto-redirect to login tab after 2 seconds
-    setTimeout(() => {
-      setKey('login');
-      setSuccess('');
-    }, 2000);
   };
 
   return (
@@ -152,9 +140,15 @@ const AuthFlow = ({ onLogin }) => {
                 />
               </Form.Group>
 
-              <Button variant="primary" type="submit" className="w-100 py-3 rounded-3 fw-bold fs-5 btn-gradient">
-                <i className="bi bi-box-arrow-in-right me-2"></i>
-                Sign In
+              <Button variant="primary" type="submit" disabled={loading} className="w-100 py-3 rounded-3 fw-bold fs-5 btn-gradient">
+                {loading ? (
+                  <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+                ) : (
+                  <>
+                    <i className="bi bi-box-arrow-in-right me-2"></i>
+                    Sign In
+                  </>
+                )}
               </Button>
             </Form>
           </Tab>
@@ -211,9 +205,15 @@ const AuthFlow = ({ onLogin }) => {
                 />
               </Form.Group>
 
-              <Button variant="primary" type="submit" className="w-100 py-3 rounded-3 fw-bold fs-5 btn-gradient">
-                <i className="bi bi-person-plus-fill me-2"></i>
-                Create Account
+              <Button variant="primary" type="submit" disabled={loading} className="w-100 py-3 rounded-3 fw-bold fs-5 btn-gradient">
+                {loading ? (
+                  <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+                ) : (
+                  <>
+                    <i className="bi bi-person-plus-fill me-2"></i>
+                    Create Account
+                  </>
+                )}
               </Button>
             </Form>
           </Tab>

@@ -8,6 +8,8 @@ import logging
 
 from app.services.housing_service import HousingAdvisoryService
 from app.services.task_manager import TaskManager
+from app.api.auth import get_current_user
+from app.models.user import User
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +34,11 @@ class TaskResponse(BaseModel):
 
 
 @router.post("/housing-recommendations", response_model=TaskResponse)
-async def create_housing_recommendation(request: HousingRequest, background_tasks: BackgroundTasks):
+async def create_housing_recommendation(
+    request: HousingRequest, 
+    background_tasks: BackgroundTasks,
+    current_user: User = Depends(get_current_user)
+):
     """Returns task_id immediately. AI processing runs in a thread pool."""
 
     user_input = f"""
