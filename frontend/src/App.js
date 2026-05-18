@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Navbar, Nav, Button, Tab, Row, Col } from 'react-bootstrap';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
+import { Container, Navbar, Nav, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/App.css';
-import AuthFlow from './components/AuthFlow';
-import MainApp from './components/MainApp';
+import LoadingScreen from './components/LoadingScreen';
+
+// Lazy load components for bundle optimization
+const AuthFlow = lazy(() => import('./components/AuthFlow'));
+const MainApp = lazy(() => import('./components/MainApp'));
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -68,13 +71,15 @@ function App() {
       </Navbar>
 
       <Container className="py-4 main-content">
-        {!isLoggedIn ? (
-          <div className="d-flex justify-content-center align-items-center min-vh-100">
-            <AuthFlow onLogin={handleLogin} />
-          </div>
-        ) : (
-          <MainApp currentUser={currentUser} onLogout={handleLogout} />
-        )}
+        <Suspense fallback={<LoadingScreen />}>
+          {!isLoggedIn ? (
+            <div className="d-flex justify-content-center align-items-center min-vh-100">
+              <AuthFlow onLogin={handleLogin} />
+            </div>
+          ) : (
+            <MainApp currentUser={currentUser} onLogout={handleLogout} />
+          )}
+        </Suspense>
       </Container>
 
       <footer className="modern-footer py-4 mt-5">
