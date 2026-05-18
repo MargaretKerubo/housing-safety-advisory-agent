@@ -1,5 +1,6 @@
 // apiService.js
 import axios from 'axios';
+import axiosRetry from 'axios-retry';
 
 // Create an axios instance with base configuration
 const apiClient = axios.create({
@@ -7,6 +8,17 @@ const apiClient = axios.create({
   timeout: 120000, // 120 seconds timeout (increased for AI processing)
   headers: {
     'Content-Type': 'application/json',
+  }
+});
+
+// Configure automated retry logic
+axiosRetry(apiClient, { 
+  retries: 3, 
+  retryDelay: axiosRetry.exponentialDelay,
+  retryCondition: (error) => {
+    // Retry on network errors or 5xx server errors
+    return axiosRetry.isNetworkOrIdempotentRequestError(error) || 
+           (error.response && error.response.status >= 500);
   }
 });
 
