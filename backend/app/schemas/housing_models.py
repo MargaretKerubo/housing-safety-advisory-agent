@@ -15,6 +15,8 @@ class HousingRequirements(BaseModel):
 
 class Neighborhood(BaseModel):
     name: str
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
     distance_to_cbd: str
     average_rent_1br: str
     average_rent_2br: str

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense, lazy } from 'react';
 import {
   Row,
   Col,
@@ -13,6 +13,9 @@ import {
   Badge
 } from 'react-bootstrap';
 import apiService from '../utils/apiService';
+
+// Lazy load MapComponent for better performance
+const MapComponent = lazy(() => import('./MapComponent'));
 
 const MainApp = ({ currentUser, onLogout }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -486,6 +489,20 @@ const MainApp = ({ currentUser, onLogout }) => {
                         <h4 className="fw-bold text-dark">Recommended Areas in {formData.location}</h4>
                         <p className="text-muted">Based on your preferences and budget of {parseInt(formData.budget).toLocaleString()} KES</p>
                       </div>
+
+                      {/* Interactive Map Visualization */}
+                      {result.recommendations && (
+                        <Suspense fallback={
+                          <div className="map-placeholder d-flex justify-content-center align-items-center bg-light rounded-4 mb-4" style={{ height: '400px', border: '2px dashed #cbd5e1' }}>
+                            <div className="text-center">
+                              <Spinner animation="border" variant="primary" className="mb-3" />
+                              <p className="text-muted fw-medium mb-0">Loading interactive map...</p>
+                            </div>
+                          </div>
+                        }>
+                          <MapComponent neighborhoods={result.recommendations.neighborhoods} />
+                        </Suspense>
+                      )}
 
                       {result.recommendations && result.recommendations.neighborhoods.map((area, index) => (
                         <Card key={index} className="neighborhood-card mb-4 border-0 shadow-sm">

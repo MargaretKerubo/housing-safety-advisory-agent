@@ -101,6 +101,7 @@ Research and recommend neighborhoods that:
 3. Have good security features
 
 For EACH neighborhood include:
+- Approximate latitude and longitude coordinates for map visualization
 - Security rating (1-5 stars)
 - Detailed security information (neighborhood watch, lighting, police proximity, crime stats, gated communities, guards)
 - Distance to workplace
@@ -120,6 +121,8 @@ Return your response in JSON format matching this structure:
   "neighborhoods": [
     {{
       "name": "string",
+      "latitude": number,
+      "longitude": number,
       "distance_to_cbd": "string",
       "average_rent_1br": "string (in KES)",
       "average_rent_2br": "string (in KES)",
