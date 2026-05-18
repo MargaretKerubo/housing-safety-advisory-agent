@@ -490,12 +490,12 @@ const MainApp = ({ currentUser, onLogout }) => {
                       {result.recommendations && result.recommendations.neighborhoods.map((area, index) => (
                         <Card key={index} className="neighborhood-card mb-4 border-0 shadow-sm">
                           <Card.Body>
-                            <div className="d-flex justify-content-between align-items-start mb-3">
+                            <div className="d-flex justify-content-between align-items-start mb-3 neighborhood-header">
                               <div>
                                 <h5 className="fw-bold text-dark mb-1">{area.name}</h5>
                                 <p className="text-muted mb-0">{area.distance_to_cbd} from {formData.destination}</p>
                               </div>
-                              <div className="text-end">
+                              <div className="text-end neighborhood-security">
                                 <div className="mb-1">Security:</div>
                                 {renderSecurityRating(area.security_rating)}
                               </div>
