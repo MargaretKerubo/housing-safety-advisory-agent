@@ -42,48 +42,71 @@ const apiService = {
   // Get housing recommendations based on user input
   getHousingRecommendations: async (inputData, onProgress) => {
     const BASE = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
+    const TOTAL_TIMEOUT = 180000; // 3 minutes total timeout
+    const startTime = Date.now();
 
-    // Step 1: submit
-    const { data: task } = await apiClient.post('/api/housing-recommendations', inputData);
-    const taskId = task.task_id;
+    // Step 1: submit the request
+    try {
+      const { data: task } = await apiClient.post('/api/housing-recommendations', inputData);
+      const taskId = task.task_id;
 
-    // Step 2: SSE (primary)
-    const sseResult = await new Promise((resolve, reject) => {
-      let settled = false;
-      const es = new EventSource(`${BASE}/api/tasks/${taskId}/stream`);
+      // Step 2: SSE (primary real-time update method)
+      let result = await new Promise((resolve, reject) => {
+        let settled = false;
+        const es = new EventSource(`${BASE}/api/tasks/${taskId}/stream`);
 
-      const finish = (fn, val) => {
-        if (settled) return;
-        settled = true;
-        es.close();
-        fn(val);
-      };
+        const finish = (fn, val) => {
+          if (settled) return;
+          settled = true;
+          es.close();
+          fn(val);
+        };
 
-      es.onmessage = (e) => {
+        es.onmessage = (e) => {
+          try {
+            const data = JSON.parse(e.data);
+            if (data.error) return finish(reject, new Error(data.error));
+            if (onProgress) onProgress(data.current_step, data.progress);
+            if (data.status === 'completed') finish(resolve, data.result);
+            if (data.status === 'failed') finish(reject, new Error(data.error || 'Task failed'));
+          } catch (err) {
+            finish(reject, new Error('Error parsing advisor updates'));
+          }
+        };
+
+        es.onerror = () => {
+          // Don't reject immediately, allow fallback to polling
+          finish(resolve, null);
+        };
+
+        // Safety timeout for SSE — fallback to polling if it takes too long to connect/update
+        setTimeout(() => finish(resolve, null), 45000); 
+      });
+
+      if (result) return result;
+
+      // Step 3: Polling fallback (if SSE failed or timed out)
+      while (Date.now() - startTime < TOTAL_TIMEOUT) {
+        await new Promise(r => setTimeout(r, 2000));
+        
         try {
-          const data = JSON.parse(e.data);
-          if (data.error) return finish(reject, new Error(data.error));
+          const { data } = await apiClient.get(`/api/tasks/${taskId}/status`);
           if (onProgress) onProgress(data.current_step, data.progress);
-          if (data.status === 'completed') finish(resolve, data.result);
-          if (data.status === 'failed') finish(reject, new Error(data.error || 'Task failed'));
-        } catch { finish(reject, new Error('SSE parse error')); }
-      };
+          
+          if (data.status === 'completed') return data.result;
+          if (data.status === 'failed') throw new Error(data.error || 'Task failed');
+        } catch (pollError) {
+          // If polling itself fails, we might want to retry a few times
+          console.error('Polling error:', pollError);
+        }
+      }
 
-      es.onerror = () => finish(reject, new Error('SSE connection failed'));
-
-      // Safety timeout — fall through to polling if SSE stalls for 90s
-      setTimeout(() => finish(reject, new Error('SSE timeout')), 90000);
-    }).catch(() => null); // null signals fallback
-
-    if (sseResult) return sseResult;
-
-    // Step 3: polling fallback
-    while (true) {
-      await new Promise(r => setTimeout(r, 1500));
-      const { data } = await apiClient.get(`/api/tasks/${taskId}/status`);
-      if (onProgress) onProgress(data.current_step, data.progress);
-      if (data.status === 'completed') return data.result;
-      if (data.status === 'failed') throw new Error(data.error || 'Task failed');
+      throw new Error('The advisor is taking longer than expected. Please try again or simplify your request.');
+    } catch (error) {
+      if (error.code === 'ECONNABORTED') {
+        throw new Error('Connection timeout. The server is busy processing your request.');
+      }
+      throw error;
     }
   },
 

@@ -130,7 +130,7 @@ const MainApp = ({ currentUser, onLogout }) => {
         setError('Unexpected response format from the server.');
       }
     } catch (err) {
-      setError('Error generating recommendations. Please try again.');
+      setError(err.message || 'Error generating recommendations. Please try again.');
       console.error('API Error:', err);
     } finally {
       setLoading(false);
