@@ -35,7 +35,12 @@ if frontend_path.exists():
 
     @app.get("/{full_path:path}")
     async def serve_frontend(full_path: str):
-        file_path = frontend_path / full_path
-        if file_path.is_file():
-            return FileResponse(file_path)
+        # Issue 5 fix — resolve and verify path stays inside frontend_path
+        # to prevent path traversal attacks (e.g. ../../secret)
+        resolved = (frontend_path / full_path).resolve()
+        if not str(resolved).startswith(str(frontend_path.resolve())):
+            from fastapi.responses import Response
+            return Response(status_code=400)
+        if resolved.is_file():
+            return FileResponse(resolved)
         return FileResponse(frontend_path / "index.html")

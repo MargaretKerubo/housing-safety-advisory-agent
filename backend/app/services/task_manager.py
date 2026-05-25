@@ -1,6 +1,6 @@
 import uuid
 from typing import Optional, Dict, Any
-from datetime import datetime
+from datetime import datetime, timezone
 
 # In-memory store: task_id -> task_data
 _tasks: Dict[str, Dict[str, Any]] = {}
@@ -14,7 +14,7 @@ class TaskManager:
             "status": "pending",
             "user_input": user_input,
             "conversation_history": conversation_history or [],
-            "created_at": datetime.utcnow().isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat(),
             "progress": 0,
             "current_step": "Initializing...",
             "result": None,
@@ -47,4 +47,4 @@ class TaskManager:
             task["result"] = result
         if error:
             task["error"] = error
-        task["updated_at"] = datetime.utcnow().isoformat()
+        task["updated_at"] = datetime.now(timezone.utc).isoformat()

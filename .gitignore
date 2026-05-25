@@ -11,3 +11,25 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environment
+venv/
+env/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node (frontend already has its own .gitignore, but catch stray files)
+node_modules/
